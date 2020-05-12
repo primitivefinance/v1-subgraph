@@ -1,0 +1,24 @@
+type DepositEventPool @entity {
+  id: ID!
+  from: Bytes!
+  inTokenU: BigInt!
+  outTokenPULP: BigInt!
+  hash: String!
+}
+
+type WithdrawEventPool @entity {
+  id: ID!
+  from: Bytes!
+  inTokenS: BigInt!
+  outTokenS: BigInt!
+  hash: String!
+}
+
+type BuyEventPool @entity {
+  id: ID!
+  from: Bytes!
+  inTokenS: BigInt!
+  outTokenU: BigInt!
+  hash: String!
+  premium: BigInt!
+}
