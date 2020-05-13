@@ -15,9 +15,15 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - DepositEventPool
-        - WithdrawnEventPool
-        - BuyEventPool
+        - Approval
+        - Buy
+        - Deposit
+        - Market
+        - OwnershipTransferred
+        - Paused
+        - Transfer
+        - Unpaused
+        - Withdraw
       abis:
         - name: primePool
           file: primePool/abis/primePool.json
@@ -53,7 +59,11 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - MintEventOption
+        - Mint
+        - Swap
+        - Redeem
+        - Close
+        - Fund
       abis:
         - name: primeOption
           file: primeOption/abis/primeOption.json

@@ -28,4 +28,35 @@ type MintEventOption @entity {
   from: Bytes!
   outTokenP: BigInt!
   outTokenR: BigInt!
+  hash: String!
+}
+
+type SwapEventOption @entity {
+  id: ID!
+  from: Bytes!
+  outTokenU: BigInt!
+  inTokenS: BigInt!
+  hash: String!
+}
+
+type RedeemEventOption @entity {
+  id: ID!
+  from: Bytes!
+  inTokenR: BigInt!
+  hash: String!
+}
+
+type CloseEventOption @entity {
+  id: ID!
+  from: Bytes!
+  inTokenP: BigInt!
+  hash: String!
+}
+
+type FundEventOption @entity {
+  id: ID!
+  cacheU: BigInt!
+  cacheS: BigInt!
+  cacheR: BigInt!
+  hash: String!
 }
