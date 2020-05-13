@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import {
-  Contract,
+  primePool, //This is the contact variable.
   Approval,
   Buy,
   Deposit,
@@ -10,7 +10,7 @@ import {
   Transfer,
   Unpaused,
   Withdraw,
-} from "../generated/Contract/Contract";
+} from "../generated/primePool/primePool";
 import {
   DepositEventPool,
   WithdrawEventPool,
@@ -82,12 +82,12 @@ export function handleBuy(event: Buy): void {
   let entity = new BuyEventPool(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   );
-  let contract = Contract.bind(event.address);
   entity.from = event.params.user;
   entity.inTokenS = event.params.inTokenS;
   entity.outTokenU = event.params.outTokenU;
   entity.premium = event.params.premium;
   entity.hash = event.transaction.hash.toHex();
+  entity.save();
 }
 
 export function handleDeposit(event: Deposit): void {
