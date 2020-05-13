@@ -221,3 +221,61 @@ export class BuyEventPool extends Entity {
     this.set("premium", Value.fromBigInt(value));
   }
 }
+
+export class MintEventOption extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save MintEventOption entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save MintEventOption entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("MintEventOption", id.toString(), this);
+  }
+
+  static load(id: string): MintEventOption | null {
+    return store.get("MintEventOption", id) as MintEventOption | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get outTokenP(): BigInt {
+    let value = this.get("outTokenP");
+    return value.toBigInt();
+  }
+
+  set outTokenP(value: BigInt) {
+    this.set("outTokenP", Value.fromBigInt(value));
+  }
+
+  get outTokenR(): BigInt {
+    let value = this.get("outTokenR");
+    return value.toBigInt();
+  }
+
+  set outTokenR(value: BigInt) {
+    this.set("outTokenR", Value.fromBigInt(value));
+  }
+}

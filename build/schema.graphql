@@ -22,3 +22,10 @@ type BuyEventPool @entity {
   hash: String!
   premium: BigInt!
 }
+
+type MintEventOption @entity {
+  id: ID!
+  from: Bytes!
+  outTokenP: BigInt!
+  outTokenR: BigInt!
+}

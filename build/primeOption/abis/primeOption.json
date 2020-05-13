@@ -2,16 +2,6 @@
   {
     "inputs": [
       {
-        "internalType": "address payable",
-        "name": "_weth",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_oracle",
-        "type": "address"
-      },
-      {
         "internalType": "string",
         "name": "name",
         "type": "string"
@@ -20,6 +10,36 @@
         "internalType": "string",
         "name": "symbol",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_marketId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenU",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenS",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "base",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expiry",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -56,29 +76,42 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "from",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "inTokenS",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "outTokenU",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "premium",
+        "name": "inTokenP",
         "type": "uint256"
       }
     ],
-    "name": "Buy",
+    "name": "Close",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "cacheU",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "cacheS",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "cacheR",
+        "type": "uint256"
+      }
+    ],
+    "name": "Fund",
     "type": "event"
   },
   {
@@ -87,55 +120,23 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "from",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "inTokenU",
+        "name": "outTokenP",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "outTokenPULP",
+        "name": "outTokenR",
         "type": "uint256"
       }
     ],
-    "name": "Deposit",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "tokenP",
-        "type": "address"
-      }
-    ],
-    "name": "Market",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
+    "name": "Mint",
     "type": "event"
   },
   {
@@ -149,6 +150,50 @@
       }
     ],
     "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "inTokenR",
+        "type": "uint256"
+      }
+    ],
+    "name": "Redeem",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "outTokenU",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "inTokenS",
+        "type": "uint256"
+      }
+    ],
+    "name": "Swap",
     "type": "event"
   },
   {
@@ -188,89 +233,6 @@
     ],
     "name": "Unpaused",
     "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "outTokenU",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "inTokenR",
-        "type": "uint256"
-      }
-    ],
-    "name": "Withdraw",
-    "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "COMPOUND_DAI",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "ONE_ETHER",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "SECONDS_IN_DAY",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenP",
-        "type": "address"
-      }
-    ],
-    "name": "addMarket",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "inputs": [
@@ -340,57 +302,51 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "tokenP",
-        "type": "address"
-      }
-    ],
-    "name": "buy",
+    "inputs": [],
+    "name": "base",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
-    "stateMutability": "payable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "base",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "expiry",
-        "type": "uint256"
-      }
-    ],
-    "name": "calculatePremium",
+    "inputs": [],
+    "name": "cacheR",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "premium",
+        "name": "",
         "type": "uint256"
-      },
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "cacheS",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "timeRemainder",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "cacheU",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -401,34 +357,29 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "tokenU",
+        "name": "receiver",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "tokenR",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "base",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
       }
     ],
-    "name": "calculateVolatilityProxy",
+    "name": "close",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "_volatility",
+        "name": "inTokenR",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "inTokenP",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "outTokenU",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -469,27 +420,75 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "expiry",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "",
         "type": "uint256"
-      },
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "factory",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "tokenP",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "deposit",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCaches",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "_cacheU",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_cacheS",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_cacheR",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "payable",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTokens",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "_tokenU",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tokenS",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tokenR",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -517,13 +516,76 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "kill",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_tokenR",
+        "type": "address"
+      }
+    ],
+    "name": "initTokenR",
     "outputs": [
       {
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "kill",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxDraw",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "draw",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      }
+    ],
+    "name": "mint",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "inTokenU",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "outTokenR",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -544,25 +606,32 @@
   },
   {
     "inputs": [],
-    "name": "oracle",
+    "name": "option",
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "tokenU",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
+      },
       {
         "internalType": "address",
-        "name": "",
+        "name": "tokenS",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "base",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expiry",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -582,48 +651,13 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenR",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "base",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      }
-    ],
-    "name": "poolUtilized",
+    "inputs": [],
+    "name": "price",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "utilized",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "name": "primes",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -631,28 +665,88 @@
   },
   {
     "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
+    "name": "prime",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "_tokenU",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tokenS",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tokenR",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_base",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_expiry",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      }
+    ],
+    "name": "redeem",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "inTokenR",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "y",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
       }
     ],
-    "name": "sqrt",
+    "name": "swap",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "z",
+        "name": "inTokenS",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "inTokenP",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "outTokenU",
         "type": "uint256"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -663,6 +757,52 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "take",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tokenR",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tokenS",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tokenU",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -735,65 +875,9 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
+    "inputs": [],
+    "name": "update",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "volatility",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "weth",
-    "outputs": [
-      {
-        "internalType": "address payable",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "tokenP",
-        "type": "address"
-      }
-    ],
-    "name": "withdraw",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
     "stateMutability": "nonpayable",
     "type": "function"
   }

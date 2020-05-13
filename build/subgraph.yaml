@@ -15,15 +15,9 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - Buy
-        - Deposit
-        - Market
-        - OwnershipTransferred
-        - Paused
-        - Transfer
-        - Unpaused
-        - Withdraw
+        - DepositEventPool
+        - WithdrawnEventPool
+        - BuyEventPool
       abis:
         - name: primePool
           file: primePool/abis/primePool.json
@@ -47,3 +41,31 @@ dataSources:
         - event: Withdraw(indexed address,uint256,uint256)
           handler: handleWithdraw
       file: primePool/primePool.wasm
+  - kind: ethereum/contract
+    name: primeOption
+    network: mainnet
+    source:
+      address: "0xced83f96AA38bFe34617ea1F699F9f0022548f61"
+      abi: primeOption
+      startBlock: 9977539
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MintEventOption
+      abis:
+        - name: primeOption
+          file: primeOption/abis/primeOption.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleMint
+        - event: Swap(indexed address,uint256,uint256)
+          handler: handleSwap
+        - event: Redeem(indexed address,uint256)
+          handler: handleRedeem
+        - event: Close(indexed address,uint256)
+          handler: handleClose
+        - event: Fund(uint256,uint256,uint256)
+          handler: handleFund
+      file: primeOption/primeOption.wasm
