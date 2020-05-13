@@ -220,7 +220,7 @@ export class Withdraw__Params {
   }
 }
 
-export class Contract__calculatePremiumResult {
+export class primePool__calculatePremiumResult {
   value0: BigInt;
   value1: BigInt;
 
@@ -237,9 +237,9 @@ export class Contract__calculatePremiumResult {
   }
 }
 
-export class Contract extends ethereum.SmartContract {
-  static bind(address: Address): Contract {
-    return new Contract("Contract", address);
+export class primePool extends ethereum.SmartContract {
+  static bind(address: Address): primePool {
+    return new primePool("primePool", address);
   }
 
   COMPOUND_DAI(): Address {
@@ -377,7 +377,7 @@ export class Contract extends ethereum.SmartContract {
     base: BigInt,
     price: BigInt,
     expiry: BigInt
-  ): Contract__calculatePremiumResult {
+  ): primePool__calculatePremiumResult {
     let result = super.call(
       "calculatePremium",
       "calculatePremium(uint256,uint256,uint256):(uint256,uint256)",
@@ -388,7 +388,7 @@ export class Contract extends ethereum.SmartContract {
       ]
     );
 
-    return new Contract__calculatePremiumResult(
+    return new primePool__calculatePremiumResult(
       result[0].toBigInt(),
       result[1].toBigInt()
     );
@@ -398,7 +398,7 @@ export class Contract extends ethereum.SmartContract {
     base: BigInt,
     price: BigInt,
     expiry: BigInt
-  ): ethereum.CallResult<Contract__calculatePremiumResult> {
+  ): ethereum.CallResult<primePool__calculatePremiumResult> {
     let result = super.tryCall(
       "calculatePremium",
       "calculatePremium(uint256,uint256,uint256):(uint256,uint256)",
@@ -413,7 +413,7 @@ export class Contract extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Contract__calculatePremiumResult(
+      new primePool__calculatePremiumResult(
         value[0].toBigInt(),
         value[1].toBigInt()
       )
