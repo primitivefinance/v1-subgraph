@@ -252,6 +252,15 @@ export class MintEventOption extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get hash(): string {
+    let value = this.get("hash");
+    return value.toString();
+  }
+
+  set hash(value: string) {
+    this.set("hash", Value.fromString(value));
+  }
+
   get from(): Bytes {
     let value = this.get("from");
     return value.toBytes();
@@ -279,13 +288,130 @@ export class MintEventOption extends Entity {
     this.set("outTokenR", Value.fromBigInt(value));
   }
 
-  get hash(): string {
-    let value = this.get("hash");
+  get name(): string {
+    let value = this.get("name");
     return value.toString();
   }
 
-  set hash(value: string) {
-    this.set("hash", Value.fromString(value));
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get expiry(): BigInt {
+    let value = this.get("expiry");
+    return value.toBigInt();
+  }
+
+  set expiry(value: BigInt) {
+    this.set("expiry", Value.fromBigInt(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
+  }
+
+  get cacheR(): BigInt {
+    let value = this.get("cacheR");
+    return value.toBigInt();
+  }
+
+  set cacheR(value: BigInt) {
+    this.set("cacheR", Value.fromBigInt(value));
+  }
+
+  get cacheS(): BigInt {
+    let value = this.get("cacheS");
+    return value.toBigInt();
+  }
+
+  set cacheS(value: BigInt) {
+    this.set("cacheS", Value.fromBigInt(value));
+  }
+
+  get cacheU(): BigInt {
+    let value = this.get("cacheU");
+    return value.toBigInt();
+  }
+
+  set cacheU(value: BigInt) {
+    this.set("cacheU", Value.fromBigInt(value));
+  }
+
+  get marketId(): BigInt {
+    let value = this.get("marketId");
+    return value.toBigInt();
+  }
+
+  set marketId(value: BigInt) {
+    this.set("marketId", Value.fromBigInt(value));
+  }
+
+  get maxDraw(): BigInt {
+    let value = this.get("maxDraw");
+    return value.toBigInt();
+  }
+
+  set maxDraw(value: BigInt) {
+    this.set("maxDraw", Value.fromBigInt(value));
+  }
+
+  get price(): BigInt {
+    let value = this.get("price");
+    return value.toBigInt();
+  }
+
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get tokenRAddress(): Bytes {
+    let value = this.get("tokenRAddress");
+    return value.toBytes();
+  }
+
+  set tokenRAddress(value: Bytes) {
+    this.set("tokenRAddress", Value.fromBytes(value));
+  }
+
+  get tokenSAddress(): Bytes {
+    let value = this.get("tokenSAddress");
+    return value.toBytes();
+  }
+
+  set tokenSAddress(value: Bytes) {
+    this.set("tokenSAddress", Value.fromBytes(value));
+  }
+
+  get tokenUAddress(): Bytes {
+    let value = this.get("tokenUAddress");
+    return value.toBytes();
+  }
+
+  set tokenUAddress(value: Bytes) {
+    this.set("tokenUAddress", Value.fromBytes(value));
+  }
+
+  get base(): BigInt {
+    let value = this.get("base");
+    return value.toBigInt();
+  }
+
+  set base(value: BigInt) {
+    this.set("base", Value.fromBigInt(value));
   }
 }
 
@@ -354,6 +480,132 @@ export class SwapEventOption extends Entity {
   set hash(value: string) {
     this.set("hash", Value.fromString(value));
   }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get expiry(): BigInt {
+    let value = this.get("expiry");
+    return value.toBigInt();
+  }
+
+  set expiry(value: BigInt) {
+    this.set("expiry", Value.fromBigInt(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
+  }
+
+  get cacheR(): BigInt {
+    let value = this.get("cacheR");
+    return value.toBigInt();
+  }
+
+  set cacheR(value: BigInt) {
+    this.set("cacheR", Value.fromBigInt(value));
+  }
+
+  get cacheS(): BigInt {
+    let value = this.get("cacheS");
+    return value.toBigInt();
+  }
+
+  set cacheS(value: BigInt) {
+    this.set("cacheS", Value.fromBigInt(value));
+  }
+
+  get cacheU(): BigInt {
+    let value = this.get("cacheU");
+    return value.toBigInt();
+  }
+
+  set cacheU(value: BigInt) {
+    this.set("cacheU", Value.fromBigInt(value));
+  }
+
+  get marketId(): BigInt {
+    let value = this.get("marketId");
+    return value.toBigInt();
+  }
+
+  set marketId(value: BigInt) {
+    this.set("marketId", Value.fromBigInt(value));
+  }
+
+  get maxDraw(): BigInt {
+    let value = this.get("maxDraw");
+    return value.toBigInt();
+  }
+
+  set maxDraw(value: BigInt) {
+    this.set("maxDraw", Value.fromBigInt(value));
+  }
+
+  get price(): BigInt {
+    let value = this.get("price");
+    return value.toBigInt();
+  }
+
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get tokenRAddress(): Bytes {
+    let value = this.get("tokenRAddress");
+    return value.toBytes();
+  }
+
+  set tokenRAddress(value: Bytes) {
+    this.set("tokenRAddress", Value.fromBytes(value));
+  }
+
+  get tokenSAddress(): Bytes {
+    let value = this.get("tokenSAddress");
+    return value.toBytes();
+  }
+
+  set tokenSAddress(value: Bytes) {
+    this.set("tokenSAddress", Value.fromBytes(value));
+  }
+
+  get tokenUAddress(): Bytes {
+    let value = this.get("tokenUAddress");
+    return value.toBytes();
+  }
+
+  set tokenUAddress(value: Bytes) {
+    this.set("tokenUAddress", Value.fromBytes(value));
+  }
+
+  get base(): BigInt {
+    let value = this.get("base");
+    return value.toBigInt();
+  }
+
+  set base(value: BigInt) {
+    this.set("base", Value.fromBigInt(value));
+  }
 }
 
 export class RedeemEventOption extends Entity {
@@ -411,6 +663,132 @@ export class RedeemEventOption extends Entity {
 
   set hash(value: string) {
     this.set("hash", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get expiry(): BigInt {
+    let value = this.get("expiry");
+    return value.toBigInt();
+  }
+
+  set expiry(value: BigInt) {
+    this.set("expiry", Value.fromBigInt(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
+  }
+
+  get cacheR(): BigInt {
+    let value = this.get("cacheR");
+    return value.toBigInt();
+  }
+
+  set cacheR(value: BigInt) {
+    this.set("cacheR", Value.fromBigInt(value));
+  }
+
+  get cacheS(): BigInt {
+    let value = this.get("cacheS");
+    return value.toBigInt();
+  }
+
+  set cacheS(value: BigInt) {
+    this.set("cacheS", Value.fromBigInt(value));
+  }
+
+  get cacheU(): BigInt {
+    let value = this.get("cacheU");
+    return value.toBigInt();
+  }
+
+  set cacheU(value: BigInt) {
+    this.set("cacheU", Value.fromBigInt(value));
+  }
+
+  get marketId(): BigInt {
+    let value = this.get("marketId");
+    return value.toBigInt();
+  }
+
+  set marketId(value: BigInt) {
+    this.set("marketId", Value.fromBigInt(value));
+  }
+
+  get maxDraw(): BigInt {
+    let value = this.get("maxDraw");
+    return value.toBigInt();
+  }
+
+  set maxDraw(value: BigInt) {
+    this.set("maxDraw", Value.fromBigInt(value));
+  }
+
+  get price(): BigInt {
+    let value = this.get("price");
+    return value.toBigInt();
+  }
+
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get tokenRAddress(): Bytes {
+    let value = this.get("tokenRAddress");
+    return value.toBytes();
+  }
+
+  set tokenRAddress(value: Bytes) {
+    this.set("tokenRAddress", Value.fromBytes(value));
+  }
+
+  get tokenSAddress(): Bytes {
+    let value = this.get("tokenSAddress");
+    return value.toBytes();
+  }
+
+  set tokenSAddress(value: Bytes) {
+    this.set("tokenSAddress", Value.fromBytes(value));
+  }
+
+  get tokenUAddress(): Bytes {
+    let value = this.get("tokenUAddress");
+    return value.toBytes();
+  }
+
+  set tokenUAddress(value: Bytes) {
+    this.set("tokenUAddress", Value.fromBytes(value));
+  }
+
+  get base(): BigInt {
+    let value = this.get("base");
+    return value.toBigInt();
+  }
+
+  set base(value: BigInt) {
+    this.set("base", Value.fromBigInt(value));
   }
 }
 
@@ -470,6 +848,132 @@ export class CloseEventOption extends Entity {
   set hash(value: string) {
     this.set("hash", Value.fromString(value));
   }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get expiry(): BigInt {
+    let value = this.get("expiry");
+    return value.toBigInt();
+  }
+
+  set expiry(value: BigInt) {
+    this.set("expiry", Value.fromBigInt(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
+  }
+
+  get cacheR(): BigInt {
+    let value = this.get("cacheR");
+    return value.toBigInt();
+  }
+
+  set cacheR(value: BigInt) {
+    this.set("cacheR", Value.fromBigInt(value));
+  }
+
+  get cacheS(): BigInt {
+    let value = this.get("cacheS");
+    return value.toBigInt();
+  }
+
+  set cacheS(value: BigInt) {
+    this.set("cacheS", Value.fromBigInt(value));
+  }
+
+  get cacheU(): BigInt {
+    let value = this.get("cacheU");
+    return value.toBigInt();
+  }
+
+  set cacheU(value: BigInt) {
+    this.set("cacheU", Value.fromBigInt(value));
+  }
+
+  get marketId(): BigInt {
+    let value = this.get("marketId");
+    return value.toBigInt();
+  }
+
+  set marketId(value: BigInt) {
+    this.set("marketId", Value.fromBigInt(value));
+  }
+
+  get maxDraw(): BigInt {
+    let value = this.get("maxDraw");
+    return value.toBigInt();
+  }
+
+  set maxDraw(value: BigInt) {
+    this.set("maxDraw", Value.fromBigInt(value));
+  }
+
+  get price(): BigInt {
+    let value = this.get("price");
+    return value.toBigInt();
+  }
+
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get tokenRAddress(): Bytes {
+    let value = this.get("tokenRAddress");
+    return value.toBytes();
+  }
+
+  set tokenRAddress(value: Bytes) {
+    this.set("tokenRAddress", Value.fromBytes(value));
+  }
+
+  get tokenSAddress(): Bytes {
+    let value = this.get("tokenSAddress");
+    return value.toBytes();
+  }
+
+  set tokenSAddress(value: Bytes) {
+    this.set("tokenSAddress", Value.fromBytes(value));
+  }
+
+  get tokenUAddress(): Bytes {
+    let value = this.get("tokenUAddress");
+    return value.toBytes();
+  }
+
+  set tokenUAddress(value: Bytes) {
+    this.set("tokenUAddress", Value.fromBytes(value));
+  }
+
+  get base(): BigInt {
+    let value = this.get("base");
+    return value.toBigInt();
+  }
+
+  set base(value: BigInt) {
+    this.set("base", Value.fromBigInt(value));
+  }
 }
 
 export class FundEventOption extends Entity {
@@ -502,22 +1006,67 @@ export class FundEventOption extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get cacheU(): BigInt {
-    let value = this.get("cacheU");
+  get cacheUEvent(): BigInt {
+    let value = this.get("cacheUEvent");
     return value.toBigInt();
   }
 
-  set cacheU(value: BigInt) {
-    this.set("cacheU", Value.fromBigInt(value));
+  set cacheUEvent(value: BigInt) {
+    this.set("cacheUEvent", Value.fromBigInt(value));
   }
 
-  get cacheS(): BigInt {
-    let value = this.get("cacheS");
+  get cacheSEvent(): BigInt {
+    let value = this.get("cacheSEvent");
     return value.toBigInt();
   }
 
-  set cacheS(value: BigInt) {
-    this.set("cacheS", Value.fromBigInt(value));
+  set cacheSEvent(value: BigInt) {
+    this.set("cacheSEvent", Value.fromBigInt(value));
+  }
+
+  get cacheREvent(): BigInt {
+    let value = this.get("cacheREvent");
+    return value.toBigInt();
+  }
+
+  set cacheREvent(value: BigInt) {
+    this.set("cacheREvent", Value.fromBigInt(value));
+  }
+
+  get hash(): string {
+    let value = this.get("hash");
+    return value.toString();
+  }
+
+  set hash(value: string) {
+    this.set("hash", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get expiry(): BigInt {
+    let value = this.get("expiry");
+    return value.toBigInt();
+  }
+
+  set expiry(value: BigInt) {
+    this.set("expiry", Value.fromBigInt(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
   }
 
   get cacheR(): BigInt {
@@ -529,12 +1078,93 @@ export class FundEventOption extends Entity {
     this.set("cacheR", Value.fromBigInt(value));
   }
 
-  get hash(): string {
-    let value = this.get("hash");
+  get cacheS(): BigInt {
+    let value = this.get("cacheS");
+    return value.toBigInt();
+  }
+
+  set cacheS(value: BigInt) {
+    this.set("cacheS", Value.fromBigInt(value));
+  }
+
+  get cacheU(): BigInt {
+    let value = this.get("cacheU");
+    return value.toBigInt();
+  }
+
+  set cacheU(value: BigInt) {
+    this.set("cacheU", Value.fromBigInt(value));
+  }
+
+  get marketId(): BigInt {
+    let value = this.get("marketId");
+    return value.toBigInt();
+  }
+
+  set marketId(value: BigInt) {
+    this.set("marketId", Value.fromBigInt(value));
+  }
+
+  get maxDraw(): BigInt {
+    let value = this.get("maxDraw");
+    return value.toBigInt();
+  }
+
+  set maxDraw(value: BigInt) {
+    this.set("maxDraw", Value.fromBigInt(value));
+  }
+
+  get price(): BigInt {
+    let value = this.get("price");
+    return value.toBigInt();
+  }
+
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
     return value.toString();
   }
 
-  set hash(value: string) {
-    this.set("hash", Value.fromString(value));
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get tokenRAddress(): Bytes {
+    let value = this.get("tokenRAddress");
+    return value.toBytes();
+  }
+
+  set tokenRAddress(value: Bytes) {
+    this.set("tokenRAddress", Value.fromBytes(value));
+  }
+
+  get tokenSAddress(): Bytes {
+    let value = this.get("tokenSAddress");
+    return value.toBytes();
+  }
+
+  set tokenSAddress(value: Bytes) {
+    this.set("tokenSAddress", Value.fromBytes(value));
+  }
+
+  get tokenUAddress(): Bytes {
+    let value = this.get("tokenUAddress");
+    return value.toBytes();
+  }
+
+  set tokenUAddress(value: Bytes) {
+    this.set("tokenUAddress", Value.fromBytes(value));
+  }
+
+  get base(): BigInt {
+    let value = this.get("base");
+    return value.toBigInt();
+  }
+
+  set base(value: BigInt) {
+    this.set("base", Value.fromBigInt(value));
   }
 }

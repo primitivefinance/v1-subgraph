@@ -25,10 +25,24 @@ type BuyEventPool @entity {
 
 type MintEventOption @entity {
   id: ID!
+  hash: String!
   from: Bytes!
   outTokenP: BigInt!
   outTokenR: BigInt!
-  hash: String!
+  name: String! #state variable
+  expiry: BigInt! #state variable
+  decimals: BigInt! #state variable
+  cacheR: BigInt! #state variable
+  cacheS: BigInt! #state variable
+  cacheU: BigInt! #state variable
+  marketId: BigInt! #state variable
+  maxDraw: BigInt! #state variable
+  price: BigInt! #state variable
+  symbol: String! #state variable
+  tokenRAddress: Bytes! #state variable
+  tokenSAddress: Bytes! #state variable
+  tokenUAddress: Bytes! #state variable
+  base: BigInt! #state variable
 }
 
 type SwapEventOption @entity {
@@ -37,6 +51,20 @@ type SwapEventOption @entity {
   outTokenU: BigInt!
   inTokenS: BigInt!
   hash: String!
+  name: String! #state variable
+  expiry: BigInt! #state variable
+  decimals: BigInt! #state variable
+  cacheR: BigInt! #state variable
+  cacheS: BigInt! #state variable
+  cacheU: BigInt! #state variable
+  marketId: BigInt! #state variable
+  maxDraw: BigInt! #state variable
+  price: BigInt! #state variable
+  symbol: String! #state variable
+  tokenRAddress: Bytes! #state variable
+  tokenSAddress: Bytes! #state variable
+  tokenUAddress: Bytes! #state variable
+  base: BigInt! #state variable
 }
 
 type RedeemEventOption @entity {
@@ -44,6 +72,20 @@ type RedeemEventOption @entity {
   from: Bytes!
   inTokenR: BigInt!
   hash: String!
+  name: String! #state variable
+  expiry: BigInt! #state variable
+  decimals: BigInt! #state variable
+  cacheR: BigInt! #state variable
+  cacheS: BigInt! #state variable
+  cacheU: BigInt! #state variable
+  marketId: BigInt! #state variable
+  maxDraw: BigInt! #state variable
+  price: BigInt! #state variable
+  symbol: String! #state variable
+  tokenRAddress: Bytes! #state variable
+  tokenSAddress: Bytes! #state variable
+  tokenUAddress: Bytes! #state variable
+  base: BigInt! #state variable
 }
 
 type CloseEventOption @entity {
@@ -51,12 +93,40 @@ type CloseEventOption @entity {
   from: Bytes!
   inTokenP: BigInt!
   hash: String!
+  name: String! #state variable
+  expiry: BigInt! #state variable
+  decimals: BigInt! #state variable
+  cacheR: BigInt! #state variable
+  cacheS: BigInt! #state variable
+  cacheU: BigInt! #state variable
+  marketId: BigInt! #state variable
+  maxDraw: BigInt! #state variable
+  price: BigInt! #state variable
+  symbol: String! #state variable
+  tokenRAddress: Bytes! #state variable
+  tokenSAddress: Bytes! #state variable
+  tokenUAddress: Bytes! #state variable
+  base: BigInt! #state variable
 }
 
 type FundEventOption @entity {
   id: ID!
-  cacheU: BigInt!
-  cacheS: BigInt!
-  cacheR: BigInt!
+  cacheUEvent: BigInt!
+  cacheSEvent: BigInt!
+  cacheREvent: BigInt!
   hash: String!
+  name: String! #state variable
+  expiry: BigInt! #state variable
+  decimals: BigInt! #state variable
+  cacheR: BigInt! #state variable
+  cacheS: BigInt! #state variable
+  cacheU: BigInt! #state variable
+  marketId: BigInt! #state variable
+  maxDraw: BigInt! #state variable
+  price: BigInt! #state variable
+  symbol: String! #state variable
+  tokenRAddress: Bytes! #state variable
+  tokenSAddress: Bytes! #state variable
+  tokenUAddress: Bytes! #state variable
+  base: BigInt! #state variable
 }

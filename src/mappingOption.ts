@@ -1,5 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import {
+  primeOption,
   Mint,
   Swap,
   Redeem,
@@ -18,10 +19,27 @@ export function handleMint(event: Mint): void {
   let entity = new MintEventOption(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   );
+  let contract = primeOption.bind(event.address);
   entity.from = event.params.from;
   entity.outTokenP = event.params.outTokenP;
   entity.outTokenR = event.params.outTokenR;
+  // Transacation / Block Data
   entity.hash = event.transaction.hash.toHex();
+  // State Variables.
+  entity.name = contract.name();
+  entity.expiry = contract.expiry();
+  entity.decimals = BigInt.fromI32(contract.decimals());
+  entity.cacheS = contract.cacheS();
+  entity.cacheU = contract.cacheU();
+  entity.cacheR = contract.cacheR();
+  entity.marketId = contract.marketId();
+  entity.maxDraw = contract.maxDraw();
+  entity.price = contract.price();
+  entity.tokenRAddress = contract.tokenR();
+  entity.tokenSAddress = contract.tokenS();
+  entity.tokenUAddress = contract.tokenU();
+  entity.symbol = contract.symbol();
+  entity.base = contract.base();
   entity.save();
 }
 
@@ -33,6 +51,23 @@ export function handleSwap(event: Swap): void {
   entity.outTokenU = event.params.outTokenU;
   entity.inTokenS = event.params.inTokenS;
   entity.hash = event.transaction.hash.toHex();
+  let contract = primeOption.bind(event.address);
+  // State Variables.
+  entity.name = contract.name();
+  entity.expiry = contract.expiry();
+  entity.decimals = BigInt.fromI32(contract.decimals());
+  entity.cacheS = contract.cacheS();
+  entity.cacheU = contract.cacheU();
+  entity.cacheR = contract.cacheR();
+  entity.marketId = contract.marketId();
+  entity.maxDraw = contract.maxDraw();
+  entity.price = contract.price();
+  entity.tokenRAddress = contract.tokenR();
+  entity.tokenSAddress = contract.tokenS();
+  entity.tokenUAddress = contract.tokenU();
+  entity.symbol = contract.symbol();
+  entity.base = contract.base();
+
   entity.save();
 }
 
@@ -43,6 +78,22 @@ export function handleRedeem(event: Redeem): void {
   entity.from = event.params.from;
   entity.inTokenR = event.params.inTokenR;
   entity.hash = event.transaction.hash.toHex();
+  let contract = primeOption.bind(event.address);
+  // State Variables.
+  entity.name = contract.name();
+  entity.expiry = contract.expiry();
+  entity.decimals = BigInt.fromI32(contract.decimals());
+  entity.cacheS = contract.cacheS();
+  entity.cacheU = contract.cacheU();
+  entity.cacheR = contract.cacheR();
+  entity.marketId = contract.marketId();
+  entity.maxDraw = contract.maxDraw();
+  entity.price = contract.price();
+  entity.tokenRAddress = contract.tokenR();
+  entity.tokenSAddress = contract.tokenS();
+  entity.tokenUAddress = contract.tokenU();
+  entity.symbol = contract.symbol();
+  entity.base = contract.base();
   entity.save();
 }
 
@@ -53,6 +104,22 @@ export function handleClose(event: Close): void {
   entity.from = event.params.from;
   entity.inTokenP = event.params.inTokenP;
   entity.hash = event.transaction.hash.toHex();
+  let contract = primeOption.bind(event.address);
+  // State Variables.
+  entity.name = contract.name();
+  entity.expiry = contract.expiry();
+  entity.decimals = BigInt.fromI32(contract.decimals());
+  entity.cacheS = contract.cacheS();
+  entity.cacheU = contract.cacheU();
+  entity.cacheR = contract.cacheR();
+  entity.marketId = contract.marketId();
+  entity.maxDraw = contract.maxDraw();
+  entity.price = contract.price();
+  entity.tokenRAddress = contract.tokenR();
+  entity.tokenSAddress = contract.tokenS();
+  entity.tokenUAddress = contract.tokenU();
+  entity.symbol = contract.symbol();
+  entity.base = contract.base();
   entity.save();
 }
 
@@ -60,9 +127,25 @@ export function handleFund(event: Fund): void {
   let entity = new FundEventOption(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   );
-  entity.cacheU = event.params.cacheU;
-  entity.cacheS = event.params.cacheS;
-  entity.cacheR = event.params.cacheR;
+  entity.cacheUEvent = event.params.cacheU;
+  entity.cacheSEvent = event.params.cacheS;
+  entity.cacheREvent = event.params.cacheR;
   entity.hash = event.transaction.hash.toHex();
+  let contract = primeOption.bind(event.address);
+  // State Variables.
+  entity.name = contract.name();
+  entity.expiry = contract.expiry();
+  entity.decimals = BigInt.fromI32(contract.decimals());
+  entity.cacheS = contract.cacheS();
+  entity.cacheU = contract.cacheU();
+  entity.cacheR = contract.cacheR();
+  entity.marketId = contract.marketId();
+  entity.maxDraw = contract.maxDraw();
+  entity.price = contract.price();
+  entity.tokenRAddress = contract.tokenR();
+  entity.tokenSAddress = contract.tokenS();
+  entity.tokenUAddress = contract.tokenU();
+  entity.symbol = contract.symbol();
+  entity.base = contract.base();
   entity.save();
 }
