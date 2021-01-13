@@ -8,6 +8,7 @@ dataSources:
     source:
       address: '0xa4accc3dff7bd0d07fa02e39cd12e1a62d15f90f'
       abi: OptionFactory
+      startBlock: 11019059
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
