@@ -1,0 +1,23 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: OptionFactory
+    network: mainnet
+    source:
+      address: "0xa4accc3dff7bd0d07fa02e39cd12e1a62d15f90f"
+      abi: OptionFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - OwnershipTransferred
+      abis:
+        - name: OptionFactory
+          file: ./abis/OptionFactory.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: ./src/mapping.ts
