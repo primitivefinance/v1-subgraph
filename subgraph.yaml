@@ -1,4 +1,6 @@
 specVersion: 0.0.2
+description: Primitive Finance
+repository: https://github.com/primitivefinance/primitive-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
