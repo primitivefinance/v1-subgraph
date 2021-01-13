@@ -34,6 +34,7 @@ export function getOption(optionAddr: Address): Option {
         option.strikeToken = getToken(strikeTokenAddrResult.value).id;
       }
     }
+    // this would revert and stop indexer if underlyingToken and strikeToken are not set.
     option.save();
   }
   return option as Option;
@@ -41,7 +42,8 @@ export function getOption(optionAddr: Address): Option {
 
 export function getToken(tokenAddr: Address): Token {
   let token = Token.load(tokenAddr.toHexString());
-  if (token) {
+  if (token == null) {
+    token = new Token(tokenAddr.toHexString());
     token.symbol = 'unknown';
     token.name = 'unknown';
     token.decimals = BigInt.fromI32(0);
