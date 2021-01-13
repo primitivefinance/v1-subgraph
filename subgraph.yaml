@@ -6,18 +6,22 @@ dataSources:
     name: OptionFactory
     network: mainnet
     source:
-      address: "0xa4accc3dff7bd0d07fa02e39cd12e1a62d15f90f"
+      address: '0xa4accc3dff7bd0d07fa02e39cd12e1a62d15f90f'
       abi: OptionFactory
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
+      file: ./src/factory.ts
       entities:
-        - OwnershipTransferred
+        - OptionFactory
       abis:
         - name: OptionFactory
           file: ./abis/OptionFactory.json
-      eventHandlers:
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-      file: ./src/mapping.ts
+        - name: Option
+          file: ./abis/Option.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      callHandlers:
+        - function: deployClone(address,address,uint256,uint256,uint256)
+          handler: handleCall_deployClone
