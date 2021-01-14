@@ -18,6 +18,7 @@ type Option @entity {
   expiry: Int!
   underlyingToken: Token!
   strikeToken: Token!
+  redeemToken: Token!
 }
 
 type Token @entity {
@@ -28,4 +29,39 @@ type Token @entity {
   symbol: String!
   name: String!
   decimals: BigInt!
+
+  # extra info needed for other parts of subgraph
+  kind: TokenKind!
+}
+
+enum TokenKind {
+  OPTION
+  REDEEM
+  OTHER
+}
+
+type OptionPair @entity {
+  # uniswap pair address
+  id: ID!
+
+  # tokens
+  short: Token! # redeem token
+  underlying: Token!
+
+  # uniswap reserves
+  reserveShort: BigDecimal!
+  reserveUnderlying: BigDecimal!
+
+  # not sure
+  longDepth: BigDecimal!
+
+  # stats
+  shortVolume: BigDecimal!
+  underlyingVolume: BigDecimal!
+  txCount: BigInt!
+  liquidityProviderCount: BigInt!
+
+  # details
+  createdAtTimestamp: Int!
+  createdAtBlockNumber: BigInt!
 }

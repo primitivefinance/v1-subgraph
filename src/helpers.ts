@@ -22,18 +22,35 @@ export function getOption(optionAddr: Address): Option {
     option = new Option(optionAddr.toHexString());
     option.expiry = 0;
     let optionContract = OptionContract.bind(optionAddr);
-    {
-      let underlyingTokenAddrResult = optionContract.try_getUnderlyingTokenAddress();
-      if (!underlyingTokenAddrResult.reverted) {
-        option.underlyingToken = getToken(underlyingTokenAddrResult.value).id;
-      }
+
+    // registering underlying token
+    let underlyingTokenAddrResult = optionContract.try_getUnderlyingTokenAddress();
+    if (!underlyingTokenAddrResult.reverted) {
+      option.underlyingToken = getToken(underlyingTokenAddrResult.value).id;
     }
-    {
-      let strikeTokenAddrResult = optionContract.try_getStrikeTokenAddress();
-      if (!strikeTokenAddrResult.reverted) {
-        option.strikeToken = getToken(strikeTokenAddrResult.value).id;
-      }
+
+    // registering strike token
+    let strikeTokenAddrResult = optionContract.try_getStrikeTokenAddress();
+    if (!strikeTokenAddrResult.reverted) {
+      option.strikeToken = getToken(strikeTokenAddrResult.value).id;
     }
+
+    // registering option token
+    {
+      let token = getToken(optionAddr);
+      token.kind = 'OPTION';
+      token.save();
+    }
+
+    // registering redeem token
+    let redeemTokenAddrResult = optionContract.try_redeemToken();
+    if (!redeemTokenAddrResult.reverted) {
+      let token = getToken(redeemTokenAddrResult.value);
+      option.redeemToken = token.id;
+      token.kind = 'REDEEM';
+      token.save();
+    }
+
     // this would revert and stop indexer if underlyingToken and strikeToken are not set.
     option.save();
   }
@@ -47,6 +64,7 @@ export function getToken(tokenAddr: Address): Token {
     token.symbol = 'unknown';
     token.name = 'unknown';
     token.decimals = BigInt.fromI32(0);
+    token.kind = 'OTHER'; // this is later changed to appropriate value
     let contract = ERC20.bind(tokenAddr);
     {
       let symbolCallResult = contract.try_symbol();
