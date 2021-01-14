@@ -1,6 +1,6 @@
-import { PairCreated } from '../generated/UniswapFactory/UniswapFactory';
-import { Redeem } from '../generated/OptionFactory/Redeem';
-import { Token, OptionPair } from '../generated/schema';
+import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
+import { Redeem } from '../../generated/OptionFactory/Redeem';
+import { Token, OptionPair } from '../../generated/schema';
 import { getToken, getOption } from './helpers';
 import { ZERO_BIGINT, ZERO_BIGDECIMAL } from './constants';
 

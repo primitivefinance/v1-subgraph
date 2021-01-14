@@ -15,7 +15,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/factory.ts
+      file: ./src/mappings/option-factory.ts
       entities:
         - OptionFactory
       abis:
@@ -41,7 +41,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/uniswap.ts
+      file: ./src/mappings/uniswap-pair-factory.ts
       entities:
         - OptionPair
         # - Token

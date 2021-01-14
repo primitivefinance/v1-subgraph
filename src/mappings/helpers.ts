@@ -1,6 +1,6 @@
-import { OptionFactory, Option, Token } from '../generated/schema';
-import { Option as OptionContract } from '../generated/OptionFactory/Option';
-import { ERC20 } from '../generated/OptionFactory/ERC20';
+import { OptionFactory, Option, Token, Market } from '../../generated/schema';
+import { Option as OptionContract } from '../../generated/OptionFactory/Option';
+import { ERC20 } from '../../generated/OptionFactory/ERC20';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { ZERO_BIGDECIMAL, ZERO_BIGINT } from './constants';
 

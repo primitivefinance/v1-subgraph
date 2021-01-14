@@ -1,4 +1,4 @@
-import { DeployCloneCall } from '../generated/OptionFactory/OptionFactory';
+import { DeployCloneCall } from '../../generated/OptionFactory/OptionFactory';
 import { getFactory, getOption } from './helpers';
 
 export function handleCall_deployClone(call: DeployCloneCall): void {
