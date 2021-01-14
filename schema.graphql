@@ -17,6 +17,9 @@ type Option @entity {
   # one-to-one
   optionPair: OptionPair
 
+  # for reverse lookup
+  market: Market!
+
   # option info
   expiry: Int!
   underlyingToken: Token!
@@ -76,4 +79,18 @@ type OptionPair @entity {
   # details
   createdAtTimestamp: Int!
   createdAtBlockNumber: BigInt!
+}
+
+type Market @entity {
+  # underlyingToken + "-" + strikeToken
+  id: ID!
+
+  # stats
+  category: String
+  options: [Option!]! @derivedFrom(field: "market") # one-to-many relationships using reverse lookup
+  totalStrikeLocked: BigDecimal!
+  totalUnderlyingLocked: BigDecimal!
+  strikeTotalVolume: BigDecimal!
+  underlyingTotalVolume: BigDecimal!
+  txCount: BigInt!
 }

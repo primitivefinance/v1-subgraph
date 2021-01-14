@@ -58,6 +58,10 @@ export function getOption(optionAddr: Address): Option {
       token.save();
     }
 
+    // creating market entry
+    let market = getMarket(option.underlyingToken + '-' + option.strikeToken);
+    option.market = market.id;
+
     // this would revert and stop indexer if underlyingToken and strikeToken are not set.
     option.save();
   }
@@ -94,4 +98,20 @@ export function getToken(tokenAddr: Address): Token {
     token.save();
   }
   return token as Token;
+}
+
+export function getMarket(id: string): Market {
+  // let id = option.underlyingToken + '-' + option.strikeToken;
+  let market = Market.load(id);
+  if (market === null) {
+    market = new Market(id);
+    // market.options = [option.id]; // [Option!]!;
+    market.totalStrikeLocked = ZERO_BIGDECIMAL; // BigDecimal!;
+    market.totalUnderlyingLocked = ZERO_BIGDECIMAL; // BigDecimal!;
+    market.strikeTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
+    market.underlyingTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
+    market.txCount = ZERO_BIGINT; // BigInt!;
+    market.save();
+  }
+  return market as Market;
 }
