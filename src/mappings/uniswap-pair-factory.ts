@@ -1,3 +1,4 @@
+import { Address } from '@graphprotocol/graph-ts';
 import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
 import { Redeem } from '../../generated/OptionFactory/Redeem';
 import { Token, UniswapPair } from '../../generated/schema';
@@ -57,7 +58,7 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
 
       uniswapPair.save();
 
-      let redeemContract = Redeem.bind(event.params.pair);
+      let redeemContract = Redeem.bind(Address.fromString(redeemToken.id));
       let callResult = redeemContract.try_optionToken();
       if (!callResult.reverted) {
         let optionTokenAddr = callResult.value;
