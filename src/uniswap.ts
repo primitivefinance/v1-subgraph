@@ -30,28 +30,31 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
     }
 
     let optionPair = OptionPair.load(event.params.pair.toHexString());
+    if (optionPair === null) {
+      optionPair = new OptionPair(event.params.pair.toHexString());
 
-    // # tokens
-    optionPair.short = redeemToken.id;
-    optionPair.underlying = underlyingToken.id;
+      // # tokens
+      optionPair.short = redeemToken.id;
+      optionPair.underlying = underlyingToken.id;
 
-    // # uniswap reserves
-    optionPair.reserveShort = ZERO_BIGDECIMAL;
-    optionPair.reserveUnderlying = ZERO_BIGDECIMAL;
+      // # uniswap reserves
+      optionPair.reserveShort = ZERO_BIGDECIMAL;
+      optionPair.reserveUnderlying = ZERO_BIGDECIMAL;
 
-    // # not sure
-    optionPair.longDepth = ZERO_BIGDECIMAL;
+      // # not sure
+      optionPair.longDepth = ZERO_BIGDECIMAL;
 
-    // # stats
-    optionPair.shortVolume = ZERO_BIGDECIMAL;
-    optionPair.underlyingVolume = ZERO_BIGDECIMAL;
-    optionPair.txCount = ZERO_BIGINT;
-    optionPair.liquidityProviderCount = ZERO_BIGINT;
+      // # stats
+      optionPair.shortVolume = ZERO_BIGDECIMAL;
+      optionPair.underlyingVolume = ZERO_BIGDECIMAL;
+      optionPair.txCount = ZERO_BIGINT;
+      optionPair.liquidityProviderCount = ZERO_BIGINT;
 
-    // # details
-    optionPair.createdAtTimestamp = event.block.timestamp.toI32();
-    optionPair.createdAtBlockNumber = event.block.number;
+      // # details
+      optionPair.createdAtTimestamp = event.block.timestamp.toI32();
+      optionPair.createdAtBlockNumber = event.block.number;
 
-    optionPair.save();
+      optionPair.save();
+    }
   }
 }
