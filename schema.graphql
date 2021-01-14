@@ -15,7 +15,7 @@ type Option @entity {
   id: ID!
 
   # one-to-one
-  optionPair: OptionPair
+  uniswapPair: UniswapPair
 
   # for reverse lookup
   market: Market!
@@ -52,7 +52,7 @@ enum TokenKind {
   OTHER
 }
 
-type OptionPair @entity {
+type UniswapPair @entity {
   # uniswap pair address
   id: ID!
 

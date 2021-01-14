@@ -1,6 +1,6 @@
 import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
 import { Redeem } from '../../generated/OptionFactory/Redeem';
-import { Token, OptionPair } from '../../generated/schema';
+import { Token, UniswapPair } from '../../generated/schema';
 import { getToken, getOption } from './helpers';
 import { ZERO_BIGINT, ZERO_BIGDECIMAL } from './constants';
 
@@ -30,32 +30,32 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
       return;
     }
 
-    let optionPair = OptionPair.load(event.params.pair.toHexString());
-    if (optionPair === null) {
-      optionPair = new OptionPair(event.params.pair.toHexString());
+    let uniswapPair = UniswapPair.load(event.params.pair.toHexString());
+    if (uniswapPair === null) {
+      uniswapPair = new UniswapPair(event.params.pair.toHexString());
 
       // # tokens
-      optionPair.shortToken = redeemToken.id;
-      optionPair.underlyingToken = underlyingToken.id;
+      uniswapPair.shortToken = redeemToken.id;
+      uniswapPair.underlyingToken = underlyingToken.id;
 
       // # uniswap reserves
-      optionPair.shortReserve = ZERO_BIGDECIMAL;
-      optionPair.underlyingReserve = ZERO_BIGDECIMAL;
+      uniswapPair.shortReserve = ZERO_BIGDECIMAL;
+      uniswapPair.underlyingReserve = ZERO_BIGDECIMAL;
 
       // # not sure
-      // optionPair.longDepth = ZERO_BIGDECIMAL;
+      // uniswapPair.longDepth = ZERO_BIGDECIMAL;
 
       // # stats
-      optionPair.shortVolume = ZERO_BIGDECIMAL;
-      optionPair.underlyingVolume = ZERO_BIGDECIMAL;
-      optionPair.txCount = ZERO_BIGINT;
-      optionPair.liquidityProviderCount = ZERO_BIGINT;
+      uniswapPair.shortVolume = ZERO_BIGDECIMAL;
+      uniswapPair.underlyingVolume = ZERO_BIGDECIMAL;
+      uniswapPair.txCount = ZERO_BIGINT;
+      uniswapPair.liquidityProviderCount = ZERO_BIGINT;
 
       // # details
-      optionPair.createdAtTimestamp = event.block.timestamp.toI32();
-      optionPair.createdAtBlockNumber = event.block.number;
+      uniswapPair.createdAtTimestamp = event.block.timestamp.toI32();
+      uniswapPair.createdAtBlockNumber = event.block.number;
 
-      optionPair.save();
+      uniswapPair.save();
 
       let redeemContract = Redeem.bind(event.params.pair);
       let callResult = redeemContract.try_optionToken();
@@ -63,10 +63,10 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
         let optionTokenAddr = callResult.value;
         let option = getOption(optionTokenAddr);
         // adding one-to-one relationship
-        option.optionPair = optionPair.id;
+        option.uniswapPair = uniswapPair.id;
         option.save();
-        optionPair.option = option.id;
-        optionPair.save();
+        uniswapPair.option = option.id;
+        uniswapPair.save();
       }
     }
   }

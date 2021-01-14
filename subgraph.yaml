@@ -43,7 +43,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/uniswap-pair-factory.ts
       entities:
-        - OptionPair
+        - UniswapPair
         # - Token
       abis:
         - name: UniswapFactory
