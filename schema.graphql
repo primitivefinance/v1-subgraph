@@ -22,6 +22,12 @@ type Option @entity {
   underlyingToken: Token!
   strikeToken: Token!
   shortToken: Token! # redeem token
+  #
+  # stats
+  strikeLocked: BigDecimal!
+  underlyingLocked: BigDecimal!
+  strikeVolume: BigDecimal!
+  underlyingVolume: BigDecimal!
 }
 
 type Token @entity {

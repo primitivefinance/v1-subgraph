@@ -2,6 +2,7 @@ import { OptionFactory, Option, Token } from '../generated/schema';
 import { Option as OptionContract } from '../generated/OptionFactory/Option';
 import { ERC20 } from '../generated/OptionFactory/ERC20';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { ZERO_BIGDECIMAL, ZERO_BIGINT } from './constants';
 
 export function getFactory(): OptionFactory {
   const factoryAddr = '0xa4accc3dff7bd0d07fa02e39cd12e1a62d15f90f'; // TODO: take this dynamically
@@ -20,7 +21,13 @@ export function getOption(optionAddr: Address): Option {
   let option = Option.load(optionAddr.toHexString());
   if (option == null) {
     option = new Option(optionAddr.toHexString());
+
     option.expiry = 0;
+    option.strikeLocked = ZERO_BIGDECIMAL; // BigDecimal!;
+    option.underlyingLocked = ZERO_BIGDECIMAL; // BigDecimal!;
+    option.strikeVolume = ZERO_BIGDECIMAL; // BigDecimal!;
+    option.underlyingVolume = ZERO_BIGDECIMAL; // BigDecimal!;
+
     let optionContract = OptionContract.bind(optionAddr);
 
     // registering underlying token
