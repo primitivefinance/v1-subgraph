@@ -14,12 +14,14 @@ type Option @entity {
   # pair address
   id: ID!
 
+  # one-to-one
+  optionPair: OptionPair
+
   # option info
   expiry: Int!
   underlyingToken: Token!
   strikeToken: Token!
   shortToken: Token! # redeem token
-  optionPair: OptionPair
 }
 
 type Token @entity {
@@ -44,6 +46,9 @@ enum TokenKind {
 type OptionPair @entity {
   # uniswap pair address
   id: ID!
+
+  # one-to-one
+  option: Option!
 
   # tokens
   shortToken: Token! # redeem token

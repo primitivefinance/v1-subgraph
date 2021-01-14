@@ -62,8 +62,11 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
       if (!callResult.reverted) {
         let optionTokenAddr = callResult.value;
         let option = getOption(optionTokenAddr);
+        // adding one-to-one relationship
         option.optionPair = optionPair.id;
         option.save();
+        optionPair.option = option.id;
+        optionPair.save();
       }
     }
   }
