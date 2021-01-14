@@ -1,6 +1,7 @@
 import { PairCreated } from '../generated/UniswapFactory/UniswapFactory';
+import { Redeem } from '../generated/OptionFactory/Redeem';
 import { Token, OptionPair } from '../generated/schema';
-import { getToken } from './helpers';
+import { getToken, getOption } from './helpers';
 import { ZERO_BIGINT, ZERO_BIGDECIMAL } from './constants';
 
 /**
@@ -55,6 +56,15 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
       optionPair.createdAtBlockNumber = event.block.number;
 
       optionPair.save();
+
+      let redeemContract = Redeem.bind(event.params.pair);
+      let callResult = redeemContract.try_optionToken();
+      if (!callResult.reverted) {
+        let optionTokenAddr = callResult.value;
+        let option = getOption(optionTokenAddr);
+        option.optionPair = optionPair.id;
+        option.save();
+      }
     }
   }
 }

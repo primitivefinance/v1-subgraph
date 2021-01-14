@@ -19,6 +19,7 @@ type Option @entity {
   underlyingToken: Token!
   strikeToken: Token!
   shortToken: Token! # redeem token
+  optionPair: OptionPair
 }
 
 type Token @entity {
