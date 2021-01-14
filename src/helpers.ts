@@ -46,7 +46,7 @@ export function getOption(optionAddr: Address): Option {
     let redeemTokenAddrResult = optionContract.try_redeemToken();
     if (!redeemTokenAddrResult.reverted) {
       let token = getToken(redeemTokenAddrResult.value);
-      option.redeemToken = token.id;
+      option.shortToken = token.id;
       token.kind = 'REDEEM';
       token.save();
     }

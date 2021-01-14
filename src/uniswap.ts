@@ -34,15 +34,15 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
       optionPair = new OptionPair(event.params.pair.toHexString());
 
       // # tokens
-      optionPair.short = redeemToken.id;
-      optionPair.underlying = underlyingToken.id;
+      optionPair.shortToken = redeemToken.id;
+      optionPair.underlyingToken = underlyingToken.id;
 
       // # uniswap reserves
-      optionPair.reserveShort = ZERO_BIGDECIMAL;
-      optionPair.reserveUnderlying = ZERO_BIGDECIMAL;
+      optionPair.shortReserve = ZERO_BIGDECIMAL;
+      optionPair.underlyingReserve = ZERO_BIGDECIMAL;
 
       // # not sure
-      optionPair.longDepth = ZERO_BIGDECIMAL;
+      // optionPair.longDepth = ZERO_BIGDECIMAL;
 
       // # stats
       optionPair.shortVolume = ZERO_BIGDECIMAL;

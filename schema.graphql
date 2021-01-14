@@ -18,7 +18,7 @@ type Option @entity {
   expiry: Int!
   underlyingToken: Token!
   strikeToken: Token!
-  redeemToken: Token!
+  shortToken: Token! # redeem token
 }
 
 type Token @entity {
@@ -35,8 +35,8 @@ type Token @entity {
 }
 
 enum TokenKind {
-  OPTION
-  REDEEM
+  OPTION # long token
+  REDEEM # short token
   OTHER
 }
 
@@ -45,15 +45,15 @@ type OptionPair @entity {
   id: ID!
 
   # tokens
-  short: Token! # redeem token
-  underlying: Token!
+  shortToken: Token! # redeem token
+  underlyingToken: Token!
 
   # uniswap reserves
-  reserveShort: BigDecimal!
-  reserveUnderlying: BigDecimal!
+  shortReserve: BigDecimal!
+  underlyingReserve: BigDecimal!
 
   # not sure
-  longDepth: BigDecimal!
+  # longDepth: BigDecimal!
 
   # stats
   shortVolume: BigDecimal!
