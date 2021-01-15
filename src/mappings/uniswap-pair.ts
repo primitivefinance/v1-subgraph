@@ -1,11 +1,23 @@
-import { Address, log } from '@graphprotocol/graph-ts';
+import { Address, log, BigInt } from '@graphprotocol/graph-ts';
 import { UniswapPair } from '../../generated/schema';
 import {
+  Mint,
   Swap,
   Sync,
   UniswapPair as UniswapPairContract,
 } from '../../generated/templates/UniswapPair/UniswapPair';
 import { bigDecimalizeToken } from './helpers';
+
+export function handleEvent_UniswapPairMint(event: Mint): void {
+  let uniswapPair = UniswapPair.load(event.address.toHexString());
+
+  if (uniswapPair !== null) {
+    uniswapPair.liquidityProviderCount = uniswapPair.liquidityProviderCount.plus(
+      BigInt.fromI32(1)
+    );
+    uniswapPair.save();
+  }
+}
 
 export function handleEvent_UniswapPairSwap(event: Swap): void {}
 
