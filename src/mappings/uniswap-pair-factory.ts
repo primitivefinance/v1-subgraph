@@ -1,9 +1,7 @@
 import { Address, log } from '@graphprotocol/graph-ts';
+import { Token, UniswapPair, Option } from '../../generated/schema';
 import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
 import { Redeem } from '../../generated/OptionFactory/Redeem';
-import { Token, UniswapPair, Option } from '../../generated/schema';
-import { UniswapPair as UniswapPairTemplate } from '../../generated/templates';
-import { getToken, getOption } from './helpers';
 import { ZERO_BIGINT, ZERO_BIGDECIMAL } from './constants';
 
 /**
@@ -74,16 +72,21 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
         );
       } else {
         let optionTokenAddr = callResult.value;
-        let option = getOption(optionTokenAddr);
-        // adding one-to-one relationship
-        option.uniswapPair = uniswapPair.id;
-        option.save();
-        uniswapPair.option = option.id;
-        log.debug('customlogs: uniswapPair.option = {}', [option.id]);
+        let option = Option.load(optionTokenAddr.toHexString());
+        if (option === null) {
+          log.debug('customlogs: Option entity does not exists for id {}', [
+            optionTokenAddr.toHexString(),
+          ]);
+        } else {
+          // adding one-to-one relationship
+          option.uniswapPair = uniswapPair.id;
+          option.save();
+          uniswapPair.option = option.id;
+          log.debug('customlogs: uniswapPair.option = {}', [option.id]);
+        }
       }
 
       uniswapPair.save();
-      }
     }
   }
 }

@@ -1,76 +1,7 @@
-import { OptionFactory, Option, Token, Market } from '../../generated/schema';
-import { Option as OptionContract } from '../../generated/OptionFactory/Option';
-import { Option as OptionTemplate } from '../../generated/templates';
-import { ERC20 } from '../../generated/OptionFactory/ERC20';
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
+import { Token, Market } from '../../generated/schema';
+import { ERC20 } from '../../generated/OptionFactory/ERC20';
 import { ZERO_BIGDECIMAL, ZERO_BIGINT } from './constants';
-
-export function getFactory(): OptionFactory {
-  const factoryAddr = '0xa4accc3dff7bd0d07fa02e39cd12e1a62d15f90f'; // TODO: take this dynamically
-  let factory = OptionFactory.load(factoryAddr);
-  if (factory === null) {
-    factory = new OptionFactory(factoryAddr);
-    factory.optionCount = 0;
-    factory.marketCount = 0;
-    factory.txCount = BigInt.fromI32(0);
-    factory.save();
-  }
-  return factory as OptionFactory;
-}
-
-export function getOption(optionAddr: Address): Option {
-  let option = Option.load(optionAddr.toHexString());
-  if (option === null) {
-    option = new Option(optionAddr.toHexString());
-
-    option.expiry = 0;
-    option.strikeLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-    option.underlyingLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-    option.strikeVolume = ZERO_BIGDECIMAL; // BigDecimal!;
-    option.underlyingVolume = ZERO_BIGDECIMAL; // BigDecimal!;
-
-    let optionContract = OptionContract.bind(optionAddr);
-
-    // registering underlying token
-    let underlyingTokenAddrResult = optionContract.try_getUnderlyingTokenAddress();
-    if (!underlyingTokenAddrResult.reverted) {
-      option.underlyingToken = getToken(underlyingTokenAddrResult.value).id;
-    }
-
-    // registering strike token
-    let strikeTokenAddrResult = optionContract.try_getStrikeTokenAddress();
-    if (!strikeTokenAddrResult.reverted) {
-      option.strikeToken = getToken(strikeTokenAddrResult.value).id;
-    }
-
-    // registering option token
-    {
-      let token = getToken(optionAddr);
-      token.kind = 'OPTION';
-      token.save();
-    }
-
-    // registering redeem token
-    let redeemTokenAddrResult = optionContract.try_redeemToken();
-    if (!redeemTokenAddrResult.reverted) {
-      let token = getToken(redeemTokenAddrResult.value);
-      option.shortToken = token.id;
-      token.kind = 'REDEEM';
-      token.save();
-    }
-
-    // creating market entry
-    let market = getMarket(option.underlyingToken + '-' + option.strikeToken);
-    option.market = market.id;
-
-    // this would revert and stop indexer if underlyingToken and strikeToken are not set.
-    option.save();
-
-    // adding contract address to indexer
-    OptionTemplate.create(Address.fromString(option.id));
-  }
-  return option as Option;
-}
 
 export function getToken(tokenAddr: Address): Token {
   let token = Token.load(tokenAddr.toHexString());

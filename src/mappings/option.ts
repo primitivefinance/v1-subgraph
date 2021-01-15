@@ -1,11 +1,11 @@
-import { Address, BigDecimal } from '@graphprotocol/graph-ts';
+import { Option } from '../../generated/schema';
 import { UpdatedCacheBalances } from '../../generated/OptionFactory/Option';
-import { getToken, getOption, getMarket, bigDecimalizeToken } from './helpers';
+import { getMarket, bigDecimalizeToken } from './helpers';
 
 export function handleEvent_OptionUpdatedCacheBalances(
   event: UpdatedCacheBalances
 ): void {
-  let option = getOption(event.address);
+  let option = Option.load(event.address.toHexString());
   let market = getMarket(option.market);
   let underlyingLockedOld = option.underlyingLocked;
   let strikeLockedOld = option.strikeLocked;
