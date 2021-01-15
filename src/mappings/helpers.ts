@@ -1,13 +1,14 @@
 import { OptionFactory, Option, Token, Market } from '../../generated/schema';
 import { Option as OptionContract } from '../../generated/OptionFactory/Option';
+import { Option as OptionTemplate } from '../../generated/templates';
 import { ERC20 } from '../../generated/OptionFactory/ERC20';
-import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { ZERO_BIGDECIMAL, ZERO_BIGINT } from './constants';
 
 export function getFactory(): OptionFactory {
   const factoryAddr = '0xa4accc3dff7bd0d07fa02e39cd12e1a62d15f90f'; // TODO: take this dynamically
   let factory = OptionFactory.load(factoryAddr);
-  if (factory == null) {
+  if (factory === null) {
     factory = new OptionFactory(factoryAddr);
     factory.optionCount = 0;
     factory.marketCount = 0;
@@ -19,7 +20,7 @@ export function getFactory(): OptionFactory {
 
 export function getOption(optionAddr: Address): Option {
   let option = Option.load(optionAddr.toHexString());
-  if (option == null) {
+  if (option === null) {
     option = new Option(optionAddr.toHexString());
 
     option.expiry = 0;
@@ -64,13 +65,16 @@ export function getOption(optionAddr: Address): Option {
 
     // this would revert and stop indexer if underlyingToken and strikeToken are not set.
     option.save();
+
+    // adding contract address to indexer
+    OptionTemplate.create(Address.fromString(option.id));
   }
   return option as Option;
 }
 
 export function getToken(tokenAddr: Address): Token {
   let token = Token.load(tokenAddr.toHexString());
-  if (token == null) {
+  if (token === null) {
     token = new Token(tokenAddr.toHexString());
     token.symbol = 'unknown';
     token.name = 'unknown';
@@ -114,4 +118,34 @@ export function getMarket(id: string): Market {
     market.save();
   }
   return market as Market;
+}
+
+export function convertBigIntToBigDecimal(
+  bigInt: BigInt,
+  decimals: BigInt
+): BigDecimal {
+  // preventing div by zero
+  if (decimals === ZERO_BIGINT) {
+    return bigInt.toBigDecimal();
+  }
+  // creating 10^decimals
+  let denominator = BigDecimal.fromString('1');
+  for (
+    let i = ZERO_BIGINT;
+    i.lt(decimals as BigInt);
+    i = i.plus(BigInt.fromI32(1))
+  ) {
+    denominator = denominator.times(BigDecimal.fromString('10'));
+  }
+  return bigInt.toBigDecimal().div(denominator);
+}
+
+export function bigDecimalizeToken(
+  bigInt: BigInt,
+  addressStr: string
+): BigDecimal {
+  return convertBigIntToBigDecimal(
+    bigInt,
+    getToken(Address.fromString(addressStr)).decimals
+  );
 }

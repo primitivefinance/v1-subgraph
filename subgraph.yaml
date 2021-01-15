@@ -53,3 +53,32 @@ dataSources:
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handleEvent_UniswapPairCreated
+templates:
+  - name: Option
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Option
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/option.ts
+      entities:
+        - Option
+      abis:
+        - name: Option
+          file: ./abis/Option.json
+      eventHandlers:
+        # - event: Mint(indexed address,uint256,uint256)
+        #   handler: handleEvent_OptionMint
+        # - event: Exercise(indexed address,uint256,uint256)
+        #   handler: handleEvent_OptionExercise
+        # - event: Redeem(indexed address,uint256)
+        #   handler: handleEvent_OptionRedeem
+        # - event: Close(indexed address,uint256)
+        #   handler: handleEvent_OptionClose
+        - event: UpdatedCacheBalances(uint256,uint256)
+          handler: handleEvent_OptionUpdatedCacheBalances
+        # - event: InitializedRedeem(indexed address,indexed address)
+        #   handler: handleEvent_OptionInitializedRedeem
