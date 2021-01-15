@@ -1,12 +1,12 @@
-import { Option } from '../../generated/schema';
+import { Market, Option } from '../../generated/schema';
 import { UpdatedCacheBalances } from '../../generated/OptionFactory/Option';
-import { getMarket, bigDecimalizeToken } from './helpers';
+import { bigDecimalizeToken } from './helpers';
 
 export function handleEvent_OptionUpdatedCacheBalances(
   event: UpdatedCacheBalances
 ): void {
   let option = Option.load(event.address.toHexString());
-  let market = getMarket(option.market);
+  let market = Market.load(option.market);
   let underlyingLockedOld = option.underlyingLocked;
   let strikeLockedOld = option.strikeLocked;
 

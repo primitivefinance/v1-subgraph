@@ -8,17 +8,33 @@ type OptionFactory @entity {
 
   # transactions
   txCount: BigInt!
+
+  # one-to-many relationships using reverse lookup
+  options: [Option!]! @derivedFrom(field: "factory")
+  markets: [Market!]! @derivedFrom(field: "factory")
+}
+
+type Market @entity {
+  # underlyingToken + "-" + strikeToken
+  id: ID!
+
+  # stats
+  totalStrikeLocked: BigDecimal!
+  totalUnderlyingLocked: BigDecimal!
+  strikeTotalVolume: BigDecimal!
+  underlyingTotalVolume: BigDecimal!
+  txCount: BigInt!
+
+  # for reverse lookup
+  factory: OptionFactory!
+
+  # one-to-many relationships using reverse lookup
+  options: [Option!]! @derivedFrom(field: "market")
 }
 
 type Option @entity {
   # pair address
   id: ID!
-
-  # one-to-one
-  uniswapPair: UniswapPair
-
-  # for reverse lookup
-  market: Market!
 
   # option info
   expiry: Int!
@@ -31,6 +47,13 @@ type Option @entity {
   underlyingLocked: BigDecimal!
   strikeVolume: BigDecimal!
   underlyingVolume: BigDecimal!
+
+  # for reverse lookup
+  factory: OptionFactory!
+  market: Market!
+
+  # one-to-one relationship
+  uniswapPair: UniswapPair
 }
 
 type Token @entity {
@@ -79,18 +102,4 @@ type UniswapPair @entity {
   # details
   createdAtTimestamp: Int!
   createdAtBlockNumber: BigInt!
-}
-
-type Market @entity {
-  # underlyingToken + "-" + strikeToken
-  id: ID!
-
-  # stats
-  category: String
-  options: [Option!]! @derivedFrom(field: "market") # one-to-many relationships using reverse lookup
-  totalStrikeLocked: BigDecimal!
-  totalUnderlyingLocked: BigDecimal!
-  strikeTotalVolume: BigDecimal!
-  underlyingTotalVolume: BigDecimal!
-  txCount: BigInt!
 }

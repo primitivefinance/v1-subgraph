@@ -1,10 +1,10 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { OptionFactory, Option } from '../../generated/schema';
+import { OptionFactory, Option, Market } from '../../generated/schema';
 import { Option as OptionTemplate } from '../../generated/templates';
 import { DeployCloneCall } from '../../generated/OptionFactory/OptionFactory';
 import { Option as OptionContract } from '../../generated/OptionFactory/Option';
-import { ZERO_BIGDECIMAL } from './constants';
-import { getToken, getMarket } from './helpers';
+import { ZERO_BIGDECIMAL, ZERO_BIGINT } from './constants';
+import { getToken } from './helpers';
 
 export function handleCall_deployClone(call: DeployCloneCall): void {
   // loading factory entity or creating if not exist
@@ -63,8 +63,21 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
     }
 
     // creating market entity
-    let market = getMarket(option.underlyingToken + '-' + option.strikeToken);
+    // let market = getMarket(option.underlyingToken + '-' + option.strikeToken);
+    let marketId = option.underlyingToken + '-' + option.strikeToken;
+    let market = Market.load(marketId);
+    if (market === null) {
+      market = new Market(marketId);
+      market.totalStrikeLocked = ZERO_BIGDECIMAL; // BigDecimal!;
+      market.totalUnderlyingLocked = ZERO_BIGDECIMAL; // BigDecimal!;
+      market.strikeTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
+      market.underlyingTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
+      market.txCount = ZERO_BIGINT; // BigInt!;
+      market.factory = factory.id;
+      market.save();
+    }
     option.market = market.id;
+    option.factory = factory.id;
 
     // this would revert and stop indexer if underlyingToken and strikeToken are not set.
     option.save();

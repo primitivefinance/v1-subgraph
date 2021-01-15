@@ -35,22 +35,6 @@ export function getToken(tokenAddr: Address): Token {
   return token as Token;
 }
 
-export function getMarket(id: string): Market {
-  // let id = option.underlyingToken + '-' + option.strikeToken;
-  let market = Market.load(id);
-  if (market === null) {
-    market = new Market(id);
-    // market.options = [option.id]; // [Option!]!;
-    market.totalStrikeLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-    market.totalUnderlyingLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-    market.strikeTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
-    market.underlyingTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
-    market.txCount = ZERO_BIGINT; // BigInt!;
-    market.save();
-  }
-  return market as Market;
-}
-
 export function convertBigIntToBigDecimal(
   bigInt: BigInt,
   decimals: BigInt
