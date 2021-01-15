@@ -82,3 +82,29 @@ templates:
           handler: handleEvent_OptionUpdatedCacheBalances
         # - event: InitializedRedeem(indexed address,indexed address)
         #   handler: handleEvent_OptionInitializedRedeem
+  - name: UniswapPair
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: UniswapPair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/uniswap-pair.ts
+      entities:
+        - UniswapPair
+      abis:
+        - name: UniswapPair
+          file: ./abis/UniswapPair.json
+      eventHandlers:
+        # - event: Mint(indexed address,uint256,uint256)
+        #   handler: handleMint
+        # - event: Burn(indexed address,uint256,uint256,indexed address)
+        #   handler: handleBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleEvent_UniswapPairSwap
+        # - event: Transfer(indexed address,indexed address,uint256)
+        #   handler: handleTransfer
+        - event: Sync(uint112,uint112)
+          handler: handleEvent_UniswapPairSync

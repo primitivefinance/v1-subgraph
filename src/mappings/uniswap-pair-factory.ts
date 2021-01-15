@@ -1,5 +1,6 @@
 import { Address, log } from '@graphprotocol/graph-ts';
 import { Token, UniswapPair, Option } from '../../generated/schema';
+import { UniswapPair as UniswapPairTemplate } from '../../generated/templates';
 import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
 import { Redeem } from '../../generated/OptionFactory/Redeem';
 import { ZERO_BIGINT, ZERO_BIGDECIMAL } from './constants';
@@ -87,6 +88,9 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
       }
 
       uniswapPair.save();
+
+      // adding contract address to indexer
+      UniswapPairTemplate.create(Address.fromString(uniswapPair.id));
     }
   }
 }
