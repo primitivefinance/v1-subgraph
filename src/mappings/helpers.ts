@@ -40,7 +40,7 @@ export function convertBigIntToBigDecimal(
   decimals: BigInt
 ): BigDecimal {
   // preventing div by zero
-  if (decimals === BIGINT_ZERO) {
+  if (decimals.equals(BIGINT_ZERO)) {
     return bigInt.toBigDecimal();
   }
   // creating 10^decimals

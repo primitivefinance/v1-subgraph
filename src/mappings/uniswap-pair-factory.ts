@@ -19,10 +19,11 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
     // identifiying which of token0 and token1 are redeem
     let redeemToken: Token;
     let underlyingToken: Token;
-    if (token0.kind === 'REDEEM') {
+
+    if (token0.kind == 'REDEEM') {
       redeemToken = token0 as Token;
       underlyingToken = token1 as Token;
-    } else if (token1.kind === 'REDEEM') {
+    } else if (token1.kind == 'REDEEM') {
       redeemToken = token1 as Token;
       underlyingToken = token0 as Token;
     } else {
