@@ -1,7 +1,8 @@
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, log } from '@graphprotocol/graph-ts';
 import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
 import { Redeem } from '../../generated/OptionFactory/Redeem';
-import { Token, UniswapPair } from '../../generated/schema';
+import { Token, UniswapPair, Option } from '../../generated/schema';
+import { UniswapPair as UniswapPairTemplate } from '../../generated/templates';
 import { getToken, getOption } from './helpers';
 import { ZERO_BIGINT, ZERO_BIGDECIMAL } from './constants';
 
@@ -28,11 +29,19 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
     } else {
       // halt execution since none of these token is a redeem token
       // example: AAVE & LINK which are both underlying tokens having token.kind === 'OTHER'
+      log.debug(
+        'customlogs: ignoring UniswapPair: token0 {} kind is {} & token1 {} kind is {}',
+        [token0.id, token0.kind, token1.id, token1.kind]
+      );
       return;
     }
 
     let uniswapPair = UniswapPair.load(event.params.pair.toHexString());
-    if (uniswapPair === null) {
+    if (uniswapPair !== null) {
+      log.debug('customlogs: UniswapPair entity already exists for id {}', [
+        event.params.pair.toHexString(),
+      ]);
+    } else {
       uniswapPair = new UniswapPair(event.params.pair.toHexString());
 
       // # tokens
@@ -56,18 +65,24 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
       uniswapPair.createdAtTimestamp = event.block.timestamp.toI32();
       uniswapPair.createdAtBlockNumber = event.block.number;
 
-      uniswapPair.save();
-
       let redeemContract = Redeem.bind(Address.fromString(redeemToken.id));
       let callResult = redeemContract.try_optionToken();
-      if (!callResult.reverted) {
+      if (callResult.reverted) {
+        log.debug(
+          `customlogs: redeemContract.try_optionToken() reverted for contract {}`,
+          [redeemToken.id]
+        );
+      } else {
         let optionTokenAddr = callResult.value;
         let option = getOption(optionTokenAddr);
         // adding one-to-one relationship
         option.uniswapPair = uniswapPair.id;
         option.save();
         uniswapPair.option = option.id;
-        uniswapPair.save();
+        log.debug('customlogs: uniswapPair.option = {}', [option.id]);
+      }
+
+      uniswapPair.save();
       }
     }
   }

@@ -48,6 +48,8 @@ dataSources:
       abis:
         - name: UniswapFactory
           file: ./abis/UniswapFactory.json
+        - name: Redeem
+          file: ./abis/Redeem.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handleEvent_UniswapPairCreated
