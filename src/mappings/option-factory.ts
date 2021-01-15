@@ -3,7 +3,7 @@ import { OptionFactory, Option, Market } from '../../generated/schema';
 import { Option as OptionTemplate } from '../../generated/templates';
 import { DeployCloneCall } from '../../generated/OptionFactory/OptionFactory';
 import { Option as OptionContract } from '../../generated/OptionFactory/Option';
-import { ZERO_BIGDECIMAL, ZERO_BIGINT } from './constants';
+import { BIGDECIMAL_ONE, BIGINT_ZERO } from './constants';
 import { getToken } from './helpers';
 
 export function handleCall_deployClone(call: DeployCloneCall): void {
@@ -27,10 +27,10 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
     option = new Option(optionAddr.toHexString());
 
     option.expiry = 0;
-    option.strikeLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-    option.underlyingLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-    option.strikeVolume = ZERO_BIGDECIMAL; // BigDecimal!;
-    option.underlyingVolume = ZERO_BIGDECIMAL; // BigDecimal!;
+    option.strikeLocked = BIGDECIMAL_ONE; // BigDecimal!;
+    option.underlyingLocked = BIGDECIMAL_ONE; // BigDecimal!;
+    option.strikeVolume = BIGDECIMAL_ONE; // BigDecimal!;
+    option.underlyingVolume = BIGDECIMAL_ONE; // BigDecimal!;
 
     let optionContract = OptionContract.bind(optionAddr);
 
@@ -68,11 +68,11 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
     let market = Market.load(marketId);
     if (market === null) {
       market = new Market(marketId);
-      market.totalStrikeLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-      market.totalUnderlyingLocked = ZERO_BIGDECIMAL; // BigDecimal!;
-      market.strikeTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
-      market.underlyingTotalVolume = ZERO_BIGDECIMAL; // BigDecimal!;
-      market.txCount = ZERO_BIGINT; // BigInt!;
+      market.totalStrikeLocked = BIGDECIMAL_ONE; // BigDecimal!;
+      market.totalUnderlyingLocked = BIGDECIMAL_ONE; // BigDecimal!;
+      market.strikeTotalVolume = BIGDECIMAL_ONE; // BigDecimal!;
+      market.underlyingTotalVolume = BIGDECIMAL_ONE; // BigDecimal!;
+      market.txCount = BIGINT_ZERO; // BigInt!;
       market.factory = factory.id;
       market.save();
     }

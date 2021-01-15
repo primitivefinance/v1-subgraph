@@ -6,6 +6,7 @@ import {
   Sync,
   UniswapPair as UniswapPairContract,
 } from '../../generated/templates/UniswapPair/UniswapPair';
+import { BIGINT_ONE } from './constants';
 import { bigDecimalizeToken } from './helpers';
 
 export function handleEvent_UniswapPairMint(event: Mint): void {
@@ -13,7 +14,7 @@ export function handleEvent_UniswapPairMint(event: Mint): void {
 
   if (uniswapPair !== null) {
     uniswapPair.liquidityProviderCount = uniswapPair.liquidityProviderCount.plus(
-      BigInt.fromI32(1)
+      BIGINT_ONE
     );
     uniswapPair.save();
   }

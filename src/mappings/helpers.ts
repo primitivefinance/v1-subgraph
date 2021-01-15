@@ -1,7 +1,7 @@
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
-import { Token, Market } from '../../generated/schema';
+import { Token } from '../../generated/schema';
 import { ERC20 } from '../../generated/OptionFactory/ERC20';
-import { ZERO_BIGDECIMAL, ZERO_BIGINT } from './constants';
+import { BIGDECIMAL_ONE, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
 export function getToken(tokenAddr: Address): Token {
   let token = Token.load(tokenAddr.toHexString());
@@ -9,7 +9,7 @@ export function getToken(tokenAddr: Address): Token {
     token = new Token(tokenAddr.toHexString());
     token.symbol = 'unknown';
     token.name = 'unknown';
-    token.decimals = BigInt.fromI32(0);
+    token.decimals = BIGINT_ZERO;
     token.kind = 'OTHER'; // this is later changed to appropriate value
     let contract = ERC20.bind(tokenAddr);
     {
@@ -40,16 +40,12 @@ export function convertBigIntToBigDecimal(
   decimals: BigInt
 ): BigDecimal {
   // preventing div by zero
-  if (decimals === ZERO_BIGINT) {
+  if (decimals === BIGINT_ZERO) {
     return bigInt.toBigDecimal();
   }
   // creating 10^decimals
-  let denominator = BigDecimal.fromString('1');
-  for (
-    let i = ZERO_BIGINT;
-    i.lt(decimals as BigInt);
-    i = i.plus(BigInt.fromI32(1))
-  ) {
+  let denominator = BIGDECIMAL_ONE;
+  for (let i = BIGINT_ZERO; i.lt(decimals as BigInt); i = i.plus(BIGINT_ONE)) {
     denominator = denominator.times(BigDecimal.fromString('10'));
   }
   return bigInt.toBigDecimal().div(denominator);

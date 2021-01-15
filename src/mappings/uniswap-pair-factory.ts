@@ -3,7 +3,7 @@ import { Token, UniswapPair, Option } from '../../generated/schema';
 import { UniswapPair as UniswapPairTemplate } from '../../generated/templates';
 import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
 import { Redeem } from '../../generated/OptionFactory/Redeem';
-import { ZERO_BIGINT, ZERO_BIGDECIMAL } from './constants';
+import { BIGINT_ZERO, BIGDECIMAL_ZERO } from './constants';
 
 /**
  * This handler is triggered for every new Pair created on Uniswap.
@@ -48,17 +48,17 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
       uniswapPair.underlyingToken = underlyingToken.id;
 
       // # uniswap reserves
-      uniswapPair.shortReserve = ZERO_BIGDECIMAL;
-      uniswapPair.underlyingReserve = ZERO_BIGDECIMAL;
+      uniswapPair.shortReserve = BIGDECIMAL_ZERO;
+      uniswapPair.underlyingReserve = BIGDECIMAL_ZERO;
 
       // # not sure
       // uniswapPair.longDepth = ZERO_BIGDECIMAL;
 
       // # stats
-      uniswapPair.shortVolume = ZERO_BIGDECIMAL;
-      uniswapPair.underlyingVolume = ZERO_BIGDECIMAL;
-      uniswapPair.txCount = ZERO_BIGINT;
-      uniswapPair.liquidityProviderCount = ZERO_BIGINT;
+      uniswapPair.shortVolume = BIGDECIMAL_ZERO;
+      uniswapPair.underlyingVolume = BIGDECIMAL_ZERO;
+      uniswapPair.txCount = BIGINT_ZERO;
+      uniswapPair.liquidityProviderCount = BIGINT_ZERO;
 
       // # details
       uniswapPair.createdAtTimestamp = event.block.timestamp.toI32();
