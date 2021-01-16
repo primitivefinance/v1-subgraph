@@ -10,8 +10,9 @@ type OptionFactory @entity {
   txCount: BigInt!
 
   # one-to-many relationships using reverse lookup
-  options: [Option!]! @derivedFrom(field: "factory")
   markets: [Market!]! @derivedFrom(field: "factory")
+  options: [Option!]! @derivedFrom(field: "factory")
+  transactions: [Transaction!]! @derivedFrom(field: "factory")
 }
 
 type Market @entity {
@@ -30,6 +31,7 @@ type Market @entity {
 
   # one-to-many relationships using reverse lookup
   options: [Option!]! @derivedFrom(field: "market")
+  transactions: [Transaction!]! @derivedFrom(field: "market")
 }
 
 type Option @entity {
@@ -54,6 +56,9 @@ type Option @entity {
 
   # one-to-one relationship
   uniswapPair: UniswapPair
+
+  # one-to-many relationships using reverse lookup
+  transactions: [Transaction!]! @derivedFrom(field: "option")
 }
 
 type Token @entity {
@@ -102,4 +107,40 @@ type UniswapPair @entity {
   # details
   createdAtTimestamp: Int!
   createdAtBlockNumber: BigInt!
+}
+
+type Transaction @entity {
+  # transaction hash
+  id: ID!
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  orderType: OrderType!
+  internalOrders: [OrderType!]!
+
+  # for reverse lookup
+  factory: OptionFactory!
+  market: Market!
+  option: Option!
+}
+
+enum OrderType {
+  MINT
+  EXERCISE
+  REDEEM
+  CLOSE
+  UNWIND
+  LONG
+  SHORT
+  WRITE
+  CLOSE_LONG
+  CLOSE_SHORT
+  NEUTRAL
+  ADD_LIQUIDITY
+  ADD_LIQUIDITY_CUSTOM
+  REMOVE_LIQUIDITY
+  REMOVE_LIQUIDITY_CLOSE
+  NEW_MARKET
+  NONE
+  APPROVE
 }

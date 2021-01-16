@@ -1,6 +1,9 @@
-import { Market, Option } from '../../generated/schema';
-import { UpdatedCacheBalances } from '../../generated/OptionFactory/Option';
-import { bigDecimalizeToken } from './helpers';
+import { Market, Option, Transaction } from '../../generated/schema';
+import {
+  UpdatedCacheBalances,
+  Mint,
+} from '../../generated/OptionFactory/Option';
+import { bigDecimalizeToken, recordTransaction } from './helpers';
 
 export function handleEvent_OptionUpdatedCacheBalances(
   event: UpdatedCacheBalances
@@ -30,4 +33,17 @@ export function handleEvent_OptionUpdatedCacheBalances(
     .minus(strikeLockedOld)
     .plus(strikeCacheNew);
   market.save();
+}
+
+export function handleEvent_OptionMint(event: Mint): void {
+  let option = Option.load(event.address.toHexString());
+  recordTransaction(
+    event.transaction.hash.toHexString(),
+    event.block.number,
+    event.block.timestamp,
+    option.factory,
+    option.market,
+    event.address.toHexString(),
+    'MINT'
+  );
 }

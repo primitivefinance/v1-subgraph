@@ -70,8 +70,8 @@ templates:
         - name: Option
           file: ./abis/Option.json
       eventHandlers:
-        # - event: Mint(indexed address,uint256,uint256)
-        #   handler: handleEvent_OptionMint
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleEvent_OptionMint
         # - event: Exercise(indexed address,uint256,uint256)
         #   handler: handleEvent_OptionExercise
         # - event: Redeem(indexed address,uint256)

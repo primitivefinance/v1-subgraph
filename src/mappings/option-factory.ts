@@ -4,7 +4,7 @@ import { Option as OptionTemplate } from '../../generated/templates';
 import { DeployCloneCall } from '../../generated/OptionFactory/OptionFactory';
 import { Option as OptionContract } from '../../generated/OptionFactory/Option';
 import { BIGDECIMAL_ONE, BIGINT_ZERO } from './constants';
-import { getToken } from './helpers';
+import { getToken, recordTransaction } from './helpers';
 
 export function handleCall_deployClone(call: DeployCloneCall): void {
   // loading factory entity or creating if not exist
@@ -84,5 +84,15 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
 
     // adding contract address to indexer
     OptionTemplate.create(Address.fromString(option.id));
+
+    recordTransaction(
+      call.transaction.hash.toHexString(),
+      call.block.number,
+      call.block.timestamp,
+      option.factory,
+      option.market,
+      option.id,
+      'NEW_MARKET'
+    );
   }
 }
