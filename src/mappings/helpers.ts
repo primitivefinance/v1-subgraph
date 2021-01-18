@@ -5,7 +5,7 @@ import {
   BIGDECIMAL_ONE,
   BIGINT_ZERO,
   BIGINT_ONE,
-  orderTypePriority,
+  ORDER_TYPE_PRIORITY,
 } from './constants';
 
 export function getToken(tokenAddr: Address): Token {
@@ -75,7 +75,7 @@ export function recordTransaction(
   option: string,
   orderType: string
 ): void {
-  if (orderTypePriority.indexOf(orderType) == -1) {
+  if (ORDER_TYPE_PRIORITY.indexOf(orderType) == -1) {
     log.debug('customlogs: invalid orderType {}', [orderType]);
     return;
   }
@@ -92,8 +92,8 @@ export function recordTransaction(
     tx.option = option;
   }
   if (
-    orderTypePriority.indexOf(orderType) >
-    orderTypePriority.indexOf(tx.orderType)
+    ORDER_TYPE_PRIORITY.indexOf(orderType) >
+    ORDER_TYPE_PRIORITY.indexOf(tx.orderType)
   ) {
     tx.orderType = orderType;
   }
