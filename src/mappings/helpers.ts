@@ -90,7 +90,7 @@ export function recordTransaction(
   if (tx === null) {
     tx = new Transaction(hash);
     tx.orderType = 'NONE';
-    tx.internalOrders = [];
+    tx.internalOrders = new Array<string>(0);
     tx.blockNumber = blockNumber;
     tx.timestamp = timestamp;
     tx.factory = factory;
@@ -103,8 +103,10 @@ export function recordTransaction(
   ) {
     tx.orderType = orderType;
   }
-  if (!tx.internalOrders.includes(orderType)) {
-    tx.internalOrders.push(orderType);
+  let _internalOrders = tx.internalOrders;
+  if (!_internalOrders.includes(orderType)) {
+    _internalOrders.push(orderType);
+    tx.internalOrders = _internalOrders;
   }
   tx.save();
 }
