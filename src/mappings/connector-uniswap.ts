@@ -6,7 +6,7 @@ import {
   FlashMintShortOptionsThenSwapCall,
   FlashCloseLongOptionsThenSwapCall,
 } from '../../generated/UniswapConnector03/UniswapConnector03';
-import { recordTransaction } from './helpers';
+import { recordTransaction, linkUserWithTransaction } from './helpers';
 import { BIGINT_ZERO } from './constants';
 
 export function handleCall_addShortLiquidityWithUnderlying(
@@ -22,6 +22,10 @@ export function handleCall_addShortLiquidityWithUnderlying(
       option.market,
       option.id,
       'ADD_LIQUIDITY'
+    );
+    linkUserWithTransaction(
+      call.inputs.to.toHexString(),
+      call.transaction.hash.toHexString()
     );
   }
 }
@@ -40,6 +44,10 @@ export function handleCall_removeShortLiquidityThenCloseOptionsCall(
       option.id,
       'REMOVE_LIQUIDITY_CLOSE'
     );
+    linkUserWithTransaction(
+      call.inputs.to.toHexString(),
+      call.transaction.hash.toHexString()
+    );
   }
 }
 
@@ -56,6 +64,10 @@ export function handleCall_flashMintShortOptionsThenSwap(
       option.market,
       option.id,
       'LONG'
+    );
+    linkUserWithTransaction(
+      call.inputs.to.toHexString(),
+      call.transaction.hash.toHexString()
     );
   }
 }
@@ -82,6 +94,10 @@ export function handleCall_flashCloseLongOptionsThenSwap(
       option.market,
       option.id,
       orderType
+    );
+    linkUserWithTransaction(
+      call.inputs.to.toHexString(),
+      call.transaction.hash.toHexString()
     );
   }
 }

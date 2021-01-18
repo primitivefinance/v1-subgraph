@@ -122,6 +122,7 @@ type Transaction @entity {
   factory: OptionFactory!
   market: Market!
   option: Option!
+  user: User # this is set if tx is to uniswap connector contract
 }
 
 enum OrderType {
@@ -143,4 +144,14 @@ enum OrderType {
   NEW_MARKET
   NONE
   APPROVE
+}
+
+type User @entity {
+  # user address
+  id: ID!
+
+  # optionPositions: [OptionPosition]
+  # liquidityPositions: [LiquidityPosition]
+  transactions: [Transaction!]! @derivedFrom(field: "user")
+  # tokenBalances: [TokenAmount]
 }

@@ -1,11 +1,5 @@
-import {
-  Address,
-  BigInt,
-  BigDecimal,
-  ethereum,
-  log,
-} from '@graphprotocol/graph-ts';
-import { Token, Transaction } from '../../generated/schema';
+import { Address, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
+import { Token, Transaction, User } from '../../generated/schema';
 import { ERC20 } from '../../generated/OptionFactory/ERC20';
 import {
   BIGDECIMAL_ONE,
@@ -109,4 +103,19 @@ export function recordTransaction(
     tx.internalOrders = _internalOrders;
   }
   tx.save();
+}
+
+export function linkUserWithTransaction(
+  userAddr: string,
+  txHash: string
+): void {
+  let user = User.load(userAddr);
+  if (user === null) {
+    user = new User(userAddr);
+    user.save();
+  }
+  let transaction = Transaction.load(txHash);
+  if (transaction !== null && transaction.user === null) {
+    transaction.user = userAddr;
+  }
 }
