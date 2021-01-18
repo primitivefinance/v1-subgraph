@@ -47,6 +47,8 @@ dataSources:
       abis:
         - name: UniswapConnector03
           file: ./abis/UniswapConnector03.json
+        - name: Option
+          file: ./abis/Option.json
       callHandlers:
         - function: addShortLiquidityWithUnderlying(address,uint256,uint256,uint256,address,uint256)
           handler: handleCall_addShortLiquidityWithUnderlying
