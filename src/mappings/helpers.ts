@@ -1,5 +1,5 @@
 import { Address, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
-import { Token, Transaction, User } from '../../generated/schema';
+import { Token, TokenBalance, Transaction, User } from '../../generated/schema';
 import { ERC20 } from '../../generated/OptionFactory/ERC20';
 import {
   BIGDECIMAL_ONE,
@@ -117,5 +117,38 @@ export function linkUserWithTransaction(
   let transaction = Transaction.load(txHash);
   if (transaction !== null && transaction.user === null) {
     transaction.user = userAddr;
+  }
+}
+
+export function updateTokenBalance(
+  tokenAddr: Address,
+  userAddr: Address
+): void {
+  let user = User.load(userAddr.toHexString());
+  if (user === null) {
+    user = new User(userAddr.toHexString());
+    user.save();
+  }
+
+  let token = getToken(tokenAddr);
+
+  let erc20Contract = ERC20.bind(tokenAddr);
+  let result = erc20Contract.try_balanceOf(userAddr);
+  if (!result.reverted) {
+    let tokenBalance = TokenBalance.load(
+      tokenAddr.toHexString() + '-' + tokenAddr.toHexString()
+    );
+    if (tokenBalance === null) {
+      tokenBalance = new TokenBalance(
+        tokenAddr.toHexString() + '-' + tokenAddr.toHexString()
+      );
+      tokenBalance.token = token.id;
+      tokenBalance.user = user.id;
+    }
+    tokenBalance.balance = convertBigIntToBigDecimal(
+      result.value,
+      token.decimals
+    );
+    tokenBalance.save();
   }
 }

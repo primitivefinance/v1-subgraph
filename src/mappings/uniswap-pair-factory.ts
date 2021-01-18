@@ -1,6 +1,10 @@
 import { Address, log } from '@graphprotocol/graph-ts';
 import { Token, UniswapPair, Option } from '../../generated/schema';
-import { UniswapPair as UniswapPairTemplate } from '../../generated/templates';
+import {
+  UniswapPair as UniswapPairTemplate,
+  ERC20Token as ERC20Template,
+} from '../../generated/templates';
+
 import { PairCreated } from '../../generated/UniswapFactory/UniswapFactory';
 import { Redeem } from '../../generated/OptionFactory/Redeem';
 import { BIGINT_ZERO, BIGDECIMAL_ZERO } from './constants';
@@ -92,6 +96,7 @@ export function handleEvent_UniswapPairCreated(event: PairCreated): void {
 
       // adding contract address to indexer
       UniswapPairTemplate.create(Address.fromString(uniswapPair.id));
+      ERC20Template.create(Address.fromString(uniswapPair.id));
     }
   }
 }

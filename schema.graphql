@@ -72,12 +72,26 @@ type Token @entity {
 
   # extra info needed for other parts of subgraph
   kind: TokenKind!
+
+  # one-to-many relationships using reverse lookup
+  tokenBalances: [TokenBalance]! @derivedFrom(field: "token")
 }
 
 enum TokenKind {
   OPTION # long token
   REDEEM # short token
   OTHER
+}
+
+type TokenBalance @entity {
+  # token address + '-' + user address
+  id: ID!
+
+  balance: BigDecimal!
+
+  # for reverse lookup
+  token: Token!
+  user: User!
 }
 
 type UniswapPair @entity {
@@ -152,6 +166,8 @@ type User @entity {
 
   # optionPositions: [OptionPosition]
   # liquidityPositions: [LiquidityPosition]
+
+  # one-to-many relationships using reverse lookup
   transactions: [Transaction!]! @derivedFrom(field: "user")
-  # tokenBalances: [TokenAmount]
+  tokenBalances: [TokenBalance]! @derivedFrom(field: "user")
 }

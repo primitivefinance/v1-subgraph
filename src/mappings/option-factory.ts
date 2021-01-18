@@ -1,6 +1,9 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { OptionFactory, Option, Market } from '../../generated/schema';
-import { Option as OptionTemplate } from '../../generated/templates';
+import {
+  Option as OptionTemplate,
+  ERC20Token as ERC20Template,
+} from '../../generated/templates';
 import { DeployCloneCall } from '../../generated/OptionFactory/OptionFactory';
 import { Option as OptionContract } from '../../generated/OptionFactory/Option';
 import { BIGDECIMAL_ONE, BIGINT_ZERO } from './constants';
@@ -84,6 +87,10 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
 
     // adding contract address to indexer
     OptionTemplate.create(Address.fromString(option.id));
+    ERC20Template.create(Address.fromString(option.id));
+    ERC20Template.create(Address.fromString(option.shortToken));
+    ERC20Template.create(Address.fromString(option.shortToken));
+    // ERC20Template.create(Address.fromString(option.uniswapPair)); // uniswapPair is null here, done in uniswap-pair-factory.ts
 
     recordTransaction(
       call.transaction.hash.toHexString(),
