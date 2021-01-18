@@ -136,11 +136,11 @@ export function updateTokenBalance(
   let result = erc20Contract.try_balanceOf(userAddr);
   if (!result.reverted) {
     let tokenBalance = TokenBalance.load(
-      tokenAddr.toHexString() + '-' + tokenAddr.toHexString()
+      tokenAddr.toHexString() + '-' + userAddr.toHexString()
     );
     if (tokenBalance === null) {
       tokenBalance = new TokenBalance(
-        tokenAddr.toHexString() + '-' + tokenAddr.toHexString()
+        tokenAddr.toHexString() + '-' + userAddr.toHexString()
       );
       tokenBalance.token = token.id;
       tokenBalance.user = user.id;
