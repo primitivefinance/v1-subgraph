@@ -128,15 +128,18 @@ templates:
       abis:
         - name: UniswapPair
           file: ./abis/UniswapPair.json
+      # callHandlers:
+      #   - function: mint(address)
+      #     handler: handleCall_mint
       eventHandlers:
-        - event: Mint(indexed address,uint256,uint256)
-          handler: handleEvent_UniswapPairMint
+        # - event: Mint(indexed address,uint256,uint256)
+        #   handler: handleEvent_UniswapPairMint
         # - event: Burn(indexed address,uint256,uint256,indexed address)
         #   handler: handleBurn
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleEvent_UniswapPairSwap
-        # - event: Transfer(indexed address,indexed address,uint256)
-        #   handler: handleTransfer
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
         - event: Sync(uint112,uint112)
           handler: handleEvent_UniswapPairSync
   - name: ERC20Token

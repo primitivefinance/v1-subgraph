@@ -1,23 +1,22 @@
-import { Address, log, BigInt } from '@graphprotocol/graph-ts';
+import { Address, log } from '@graphprotocol/graph-ts';
 import { Option, UniswapPair } from '../../generated/schema';
 import {
-  Mint,
+  Transfer,
   Swap,
   Sync,
   UniswapPair as UniswapPairContract,
 } from '../../generated/templates/UniswapPair/UniswapPair';
-import { BIGINT_ONE, BIGINT_ZERO } from './constants';
-import { bigDecimalizeToken, recordTransaction } from './helpers';
+import { BIGINT_ZERO } from './constants';
+import {
+  bigDecimalizeToken,
+  recordTransaction,
+  updateLiquidityPosition,
+} from './helpers';
 
-export function handleEvent_UniswapPairMint(event: Mint): void {
-  let uniswapPair = UniswapPair.load(event.address.toHexString());
-
-  if (uniswapPair !== null) {
-    uniswapPair.liquidityProviderCount = uniswapPair.liquidityProviderCount.plus(
-      BIGINT_ONE
-    );
-    uniswapPair.save();
-  }
+// when liquidity is added or removed or transferred to other wallets
+export function handleEvent_UniswapTransfer(event: Transfer): void {
+  updateLiquidityPosition(event.address, event.params.from);
+  updateLiquidityPosition(event.address, event.params.to);
 }
 
 export function handleEvent_UniswapPairSwap(event: Swap): void {

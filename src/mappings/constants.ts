@@ -1,9 +1,12 @@
-import { BigInt, BigDecimal } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts';
 
 export let BIGINT_ZERO = BigInt.fromI32(0);
 export let BIGINT_ONE = BigInt.fromI32(1);
 export let BIGDECIMAL_ZERO = BigDecimal.fromString('0');
 export let BIGDECIMAL_ONE = BigDecimal.fromString('1');
+export let ADDRESS_ZERO = Address.fromString(
+  '0x0000000000000000000000000000000000000000'
+);
 
 export let ORDER_TYPE_PRIORITY = new Array<string>(18);
 

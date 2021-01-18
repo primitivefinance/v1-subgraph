@@ -1,11 +1,19 @@
 import { Address, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
-import { Token, TokenBalance, Transaction, User } from '../../generated/schema';
+import {
+  LiquidityPosition,
+  Token,
+  TokenBalance,
+  Transaction,
+  UniswapPair,
+  User,
+} from '../../generated/schema';
 import { ERC20 } from '../../generated/OptionFactory/ERC20';
 import {
   BIGDECIMAL_ONE,
   BIGINT_ZERO,
   BIGINT_ONE,
   ORDER_TYPE_PRIORITY,
+  ADDRESS_ZERO,
 } from './constants';
 
 export function getToken(tokenAddr: Address): Token {
@@ -150,5 +158,48 @@ export function updateTokenBalance(
       token.decimals
     );
     tokenBalance.save();
+  }
+}
+
+export function updateLiquidityPosition(
+  pairAddr: Address,
+  userAddr: Address
+): void {
+  if (userAddr.equals(ADDRESS_ZERO)) {
+    return; // no-op for zero address
+  }
+
+  let user = User.load(userAddr.toHexString());
+  if (user === null) {
+    user = new User(userAddr.toHexString());
+    user.save();
+  }
+
+  let uniswapPair = UniswapPair.load(pairAddr.toHexString());
+
+  let erc20Contract = ERC20.bind(pairAddr);
+  let result = erc20Contract.try_balanceOf(userAddr);
+  if (!result.reverted) {
+    let liquidityPosition = LiquidityPosition.load(
+      pairAddr.toHexString() + '-' + userAddr.toHexString()
+    );
+    if (liquidityPosition === null) {
+      // user is adding the liquidity for first time to this pair
+      uniswapPair.liquidityProviderCount = uniswapPair.liquidityProviderCount.plus(
+        BIGINT_ONE
+      );
+      uniswapPair.save();
+      liquidityPosition = new LiquidityPosition(
+        pairAddr.toHexString() + '-' + userAddr.toHexString()
+      );
+    }
+    liquidityPosition.liquidityTokenBalance = convertBigIntToBigDecimal(
+      result.value,
+      BigInt.fromI32(18)
+    );
+    liquidityPosition.option = uniswapPair.option;
+    liquidityPosition.uniswapPair = uniswapPair.id;
+    liquidityPosition.user = user.id;
+    liquidityPosition.save();
   }
 }

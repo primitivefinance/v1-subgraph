@@ -165,9 +165,21 @@ type User @entity {
   id: ID!
 
   # optionPositions: [OptionPosition]
-  # liquidityPositions: [LiquidityPosition]
 
   # one-to-many relationships using reverse lookup
+  liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "user")
   transactions: [Transaction!]! @derivedFrom(field: "user")
   tokenBalances: [TokenBalance]! @derivedFrom(field: "user")
+}
+
+type LiquidityPosition @entity {
+  # pair address + '-' + user address
+  id: ID!
+
+  liquidityTokenBalance: BigDecimal!
+
+  # for reverse lookup
+  option: Option!
+  uniswapPair: UniswapPair!
+  user: User!
 }
