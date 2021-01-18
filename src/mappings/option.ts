@@ -9,7 +9,7 @@ import { bigDecimalizeToken, recordTransaction } from './helpers';
  * This method is called by the indexer whenever it finds the event
  * @param event contains event params and other info like tx, block
  */
-export function handleEvent_OptionUpdatedCacheBalances(
+export function handleEvent_UpdatedCacheBalances(
   event: UpdatedCacheBalances
 ): void {
   let option = Option.load(event.address.toHexString());
@@ -43,7 +43,7 @@ export function handleEvent_OptionUpdatedCacheBalances(
  * This method is called by the indexer whenever it finds the event
  * @param event contains event params and other info like tx, block
  */
-export function handleEvent_OptionMint(event: Mint): void {
+export function handleEvent_Mint(event: Mint): void {
   let option = Option.load(event.address.toHexString());
   recordTransaction(
     event.transaction.hash.toHexString(),

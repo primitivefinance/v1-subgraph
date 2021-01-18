@@ -14,7 +14,7 @@ import { BIGINT_ZERO, BIGDECIMAL_ZERO } from './constants';
  * Pairs which have Reedem tokens as one of the tokens are processed, rest are ignored.
  * @param event PairCreated event data
  */
-export function handleEvent_UniswapPairCreated(event: PairCreated): void {
+export function handleEvent_PairCreated(event: PairCreated): void {
   let token0 = Token.load(event.params.token0.toHexString());
   let token1 = Token.load(event.params.token1.toHexString());
 

@@ -83,7 +83,7 @@ dataSources:
           file: ./abis/Redeem.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
-          handler: handleEvent_UniswapPairCreated
+          handler: handleEvent_PairCreated
 templates:
   - name: Option
     kind: ethereum/contract
@@ -102,7 +102,7 @@ templates:
           file: ./abis/Option.json
       eventHandlers:
         - event: Mint(indexed address,uint256,uint256)
-          handler: handleEvent_OptionMint
+          handler: handleEvent_Mint
         # - event: Exercise(indexed address,uint256,uint256)
         #   handler: handleEvent_OptionExercise
         # - event: Redeem(indexed address,uint256)
@@ -110,7 +110,7 @@ templates:
         # - event: Close(indexed address,uint256)
         #   handler: handleEvent_OptionClose
         - event: UpdatedCacheBalances(uint256,uint256)
-          handler: handleEvent_OptionUpdatedCacheBalances
+          handler: handleEvent_UpdatedCacheBalances
         # - event: InitializedRedeem(indexed address,indexed address)
         #   handler: handleEvent_OptionInitializedRedeem
   - name: UniswapPair
@@ -137,11 +137,11 @@ templates:
         # - event: Burn(indexed address,uint256,uint256,indexed address)
         #   handler: handleBurn
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
-          handler: handleEvent_UniswapPairSwap
+          handler: handleEvent_Swap
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleEvent_Transfer
         - event: Sync(uint112,uint112)
-          handler: handleEvent_UniswapPairSync
+          handler: handleEvent_Sync
   - name: ERC20Token
     kind: ethereum/contract
     network: mainnet
