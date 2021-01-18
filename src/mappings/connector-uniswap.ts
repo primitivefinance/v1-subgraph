@@ -1,4 +1,5 @@
 import { Option } from '../../generated/schema';
+import { Option as OptionContract } from '../../generated/OptionFactory/Option';
 import {
   AddShortLiquidityWithUnderlyingCall,
   RemoveShortLiquidityThenCloseOptionsCall,
@@ -6,6 +7,7 @@ import {
   FlashCloseLongOptionsThenSwapCall,
 } from '../../generated/UniswapConnector03/UniswapConnector03';
 import { recordTransaction } from './helpers';
+import { BIGINT_ZERO } from './constants';
 
 export function handleCall_addShortLiquidityWithUnderlying(
   call: AddShortLiquidityWithUnderlyingCall
@@ -61,6 +63,15 @@ export function handleCall_flashMintShortOptionsThenSwap(
 export function handleCall_flashCloseLongOptionsThenSwap(
   call: FlashCloseLongOptionsThenSwapCall
 ): void {
+  // WRITE = if user doesnt have option token balance
+  // CLOSE_LONG = if user does have option token balance
+  let orderType = 'WRITE';
+  let optionContract = OptionContract.bind(call.inputs.optionAddress);
+  let result = optionContract.try_balanceOf(call.inputs.to);
+  if (!result.reverted && result.value.gt(BIGINT_ZERO)) {
+    orderType = 'CLOSE_LONG';
+  }
+
   let option = Option.load(call.inputs.optionAddress.toHexString());
   if (option !== null) {
     recordTransaction(
@@ -70,7 +81,7 @@ export function handleCall_flashCloseLongOptionsThenSwap(
       option.factory,
       option.market,
       option.id,
-      'WRITE'
+      orderType
     );
   }
 }
