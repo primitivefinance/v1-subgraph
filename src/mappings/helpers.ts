@@ -192,14 +192,14 @@ export function updateLiquidityPosition(
       liquidityPosition = new LiquidityPosition(
         pairAddr.toHexString() + '-' + userAddr.toHexString()
       );
+      liquidityPosition.option = uniswapPair.option;
+      liquidityPosition.uniswapPair = uniswapPair.id;
+      liquidityPosition.user = user.id;
     }
     liquidityPosition.liquidityTokenBalance = convertBigIntToBigDecimal(
       result.value,
       BigInt.fromI32(18)
     );
-    liquidityPosition.option = uniswapPair.option;
-    liquidityPosition.uniswapPair = uniswapPair.id;
-    liquidityPosition.user = user.id;
     liquidityPosition.save();
   }
 }
