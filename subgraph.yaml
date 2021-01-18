@@ -31,6 +31,35 @@ dataSources:
         - function: deployClone(address,address,uint256,uint256,uint256)
           handler: handleCall_deployClone
   - kind: ethereum/contract
+    name: UniswapConnector03
+    network: mainnet
+    source:
+      address: '0x66fD5619a2a12dB3469e5A1bC5634f981e676c75'
+      abi: UniswapConnector03
+      startBlock: 11142828 # first deployClone tx
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/connector-uniswap.ts
+      entities:
+        - OptionFactory
+      abis:
+        - name: UniswapConnector03
+          file: ./abis/UniswapConnector03.json
+      callHandlers:
+        - function: addShortLiquidityWithUnderlying(address,uint256,uint256,uint256,address,uint256)
+          handler: handleCall_addShortLiquidityWithUnderlying
+        - function: removeShortLiquidityThenCloseOptions(address,uint256,uint256,uint256,address,uint256)
+          handler: handleCall_removeShortLiquidityThenCloseOptionsCall
+        - function: flashMintShortOptionsThenSwap(address,address,uint256,uint256,address[],address)
+          handler: handleCall_flashMintShortOptionsThenSwap
+        - function: flashCloseLongOptionsThenSwap(address,address,uint256,uint256,address[],address)
+          handler: handleCall_flashCloseLongOptionsThenSwap
+      # eventHandlers:
+      #   - event: FlashOpened(indexed address,uint256,uint256)
+      #     handler: handleEvent_ConnectorFlashOpened
+  - kind: ethereum/contract
     name: UniswapFactory
     network: mainnet
     source:

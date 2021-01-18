@@ -1,13 +1,13 @@
 import { Address, log, BigInt } from '@graphprotocol/graph-ts';
-import { UniswapPair } from '../../generated/schema';
+import { Option, UniswapPair } from '../../generated/schema';
 import {
   Mint,
   Swap,
   Sync,
   UniswapPair as UniswapPairContract,
 } from '../../generated/templates/UniswapPair/UniswapPair';
-import { BIGINT_ONE } from './constants';
-import { bigDecimalizeToken } from './helpers';
+import { BIGINT_ONE, BIGINT_ZERO } from './constants';
+import { bigDecimalizeToken, recordTransaction } from './helpers';
 
 export function handleEvent_UniswapPairMint(event: Mint): void {
   let uniswapPair = UniswapPair.load(event.address.toHexString());
@@ -31,6 +31,9 @@ export function handleEvent_UniswapPairSwap(event: Swap): void {
     let _underlyingVolumeNewRaw = event.params.amount1In
       .minus(event.params.amount1Out)
       .abs();
+    let isSwapShortForUnderlying = event.params.amount0In
+      .minus(event.params.amount0Out)
+      .gt(BIGINT_ZERO);
 
     // retrieving actual token0 address of this pair by making a call
     let uniswapPairContract = UniswapPairContract.bind(event.address);
@@ -48,6 +51,7 @@ export function handleEvent_UniswapPairSwap(event: Swap): void {
       let temp = _shortVolumeNewRaw;
       _shortVolumeNewRaw = _underlyingVolumeNewRaw;
       _underlyingVolumeNewRaw = temp;
+      isSwapShortForUnderlying = !isSwapShortForUnderlying;
     }
 
     // adding the volume and writing to storage
@@ -58,6 +62,19 @@ export function handleEvent_UniswapPairSwap(event: Swap): void {
       bigDecimalizeToken(_underlyingVolumeNewRaw, uniswapPair.underlyingToken)
     );
     uniswapPair.save();
+
+    let option = Option.load(uniswapPair.option);
+    if (option !== null) {
+      recordTransaction(
+        event.transaction.hash.toHexString(),
+        event.block.number,
+        event.block.timestamp,
+        option.factory,
+        option.market,
+        option.id,
+        isSwapShortForUnderlying ? 'CLOSE_SHORT' : 'SHORT'
+      );
+    }
   }
 }
 
