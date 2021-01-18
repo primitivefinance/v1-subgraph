@@ -9,6 +9,10 @@ import {
 import { recordTransaction, linkUserWithTransaction } from './helpers';
 import { BIGINT_ZERO } from './constants';
 
+/**
+ * This method is called by the indexer whenever it finds call
+ * @param call contains inputs outputs and other tx, block info
+ */
 export function handleCall_addShortLiquidityWithUnderlying(
   call: AddShortLiquidityWithUnderlyingCall
 ): void {
@@ -30,6 +34,10 @@ export function handleCall_addShortLiquidityWithUnderlying(
   }
 }
 
+/**
+ * This method is called by the indexer whenever it finds call
+ * @param call contains inputs outputs and other tx, block info
+ */
 export function handleCall_removeShortLiquidityThenCloseOptionsCall(
   call: RemoveShortLiquidityThenCloseOptionsCall
 ): void {
@@ -51,6 +59,10 @@ export function handleCall_removeShortLiquidityThenCloseOptionsCall(
   }
 }
 
+/**
+ * This method is called by the indexer whenever it finds call
+ * @param call contains inputs outputs and other tx, block info
+ */
 export function handleCall_flashMintShortOptionsThenSwap(
   call: FlashMintShortOptionsThenSwapCall
 ): void {
@@ -72,6 +84,10 @@ export function handleCall_flashMintShortOptionsThenSwap(
   }
 }
 
+/**
+ * This method is called by the indexer whenever it finds call
+ * @param call contains inputs outputs and other tx, block info
+ */
 export function handleCall_flashCloseLongOptionsThenSwap(
   call: FlashCloseLongOptionsThenSwapCall
 ): void {
@@ -101,18 +117,3 @@ export function handleCall_flashCloseLongOptionsThenSwap(
     );
   }
 }
-
-// export function handleEvent_ConnectorFlashOpened(event: FlashOpened): void {
-//   let option = Option.load(uniswapPair.option);
-//   if (option !== null) {
-//     recordTransaction(
-//       event.transaction.hash.toHexString(),
-//       event.block.number,
-//       event.block.timestamp,
-//       option.factory,
-//       option.market,
-//       option.id,
-//       isSwapShortForUnderlying ? 'CLOSE_SHORT' : 'Short'
-//     );
-//   }
-// }

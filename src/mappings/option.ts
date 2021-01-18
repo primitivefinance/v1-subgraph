@@ -5,6 +5,10 @@ import {
 } from '../../generated/OptionFactory/Option';
 import { bigDecimalizeToken, recordTransaction } from './helpers';
 
+/**
+ * This method is called by the indexer whenever it finds the event
+ * @param event contains event params and other info like tx, block
+ */
 export function handleEvent_OptionUpdatedCacheBalances(
   event: UpdatedCacheBalances
 ): void {
@@ -35,6 +39,10 @@ export function handleEvent_OptionUpdatedCacheBalances(
   market.save();
 }
 
+/**
+ * This method is called by the indexer whenever it finds the event
+ * @param event contains event params and other info like tx, block
+ */
 export function handleEvent_OptionMint(event: Mint): void {
   let option = Option.load(event.address.toHexString());
   recordTransaction(

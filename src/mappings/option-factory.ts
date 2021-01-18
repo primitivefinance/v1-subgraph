@@ -9,6 +9,10 @@ import { Option as OptionContract } from '../../generated/OptionFactory/Option';
 import { BIGDECIMAL_ONE, BIGINT_ZERO } from './constants';
 import { getToken, recordTransaction } from './helpers';
 
+/**
+ * This method is called by the indexer whenever it finds call
+ * @param call contains inputs outputs and other tx, block info
+ */
 export function handleCall_deployClone(call: DeployCloneCall): void {
   // loading factory entity or creating if not exist
   let factory = OptionFactory.load(call.to.toHexString());

@@ -13,12 +13,20 @@ import {
   updateLiquidityPosition,
 } from './helpers';
 
-// when liquidity is added or removed or transferred to other wallets
+/**
+ * This method is called by the indexer whenever it finds the event
+ * @dev Emitted whenever liquidity is added or removed or transferred to other wallets
+ * @param event contains event params and other info like tx, block
+ */
 export function handleEvent_UniswapTransfer(event: Transfer): void {
   updateLiquidityPosition(event.address, event.params.from);
   updateLiquidityPosition(event.address, event.params.to);
 }
 
+/**
+ * This method is called by the indexer whenever it finds the event
+ * @param event contains event params and other info like tx, block
+ */
 export function handleEvent_UniswapPairSwap(event: Swap): void {
   let uniswapPair = UniswapPair.load(event.address.toHexString());
 
@@ -77,6 +85,10 @@ export function handleEvent_UniswapPairSwap(event: Swap): void {
   }
 }
 
+/**
+ * This method is called by the indexer whenever it finds the event
+ * @param event contains event params and other info like tx, block
+ */
 export function handleEvent_UniswapPairSync(event: Sync): void {
   let uniswapPair = UniswapPair.load(event.address.toHexString());
 

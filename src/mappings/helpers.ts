@@ -16,6 +16,10 @@ import {
   ADDRESS_ZERO,
 } from './constants';
 
+/**
+ * Creates Token entity if not exist and populate symbol, name and decimal values
+ * @param tokenAddr ERC20 token address
+ */
 export function getToken(tokenAddr: Address): Token {
   let token = Token.load(tokenAddr.toHexString());
   if (token === null) {
@@ -48,6 +52,11 @@ export function getToken(tokenAddr: Address): Token {
   return token as Token;
 }
 
+/**
+ * Useful to convert uint256 values into user friendly decimal point
+ * @param bigInt a uint256 value from smart contract
+ * @param decimals number of decimals to divide
+ */
 export function convertBigIntToBigDecimal(
   bigInt: BigInt,
   decimals: BigInt
@@ -64,6 +73,11 @@ export function convertBigIntToBigDecimal(
   return bigInt.toBigDecimal().div(denominator);
 }
 
+/**
+ * Extends convertBigIntToBigDecimal to accept an ERC20 token address
+ * @param bigInt a uint256 value from smart contract
+ * @param addressStr ERC20 token address
+ */
 export function bigDecimalizeToken(
   bigInt: BigInt,
   addressStr: string
@@ -74,6 +88,17 @@ export function bigDecimalizeToken(
   );
 }
 
+/**
+ * Adds given orderType to the internalOrders arr (if it isn't already present), and
+ * updates Transaction.orderType if priority of given orderType is higher than existing value
+ * @param hash tx hash
+ * @param blockNumber
+ * @param timestamp
+ * @param factory address of factory contract
+ * @param market id of market entity
+ * @param option address of option
+ * @param orderType valid order type string (see constants.ts)
+ */
 export function recordTransaction(
   hash: string,
   blockNumber: BigInt,
@@ -83,11 +108,13 @@ export function recordTransaction(
   option: string,
   orderType: string
 ): void {
+  // catch accidental spelling mistakes in the graph logs
   if (ORDER_TYPE_PRIORITY.indexOf(orderType) == -1) {
     log.debug('customlogs: invalid orderType {}', [orderType]);
     return;
   }
 
+  // create Transaction entity if it doesn't exist already
   let tx = Transaction.load(hash);
   if (tx === null) {
     tx = new Transaction(hash);
@@ -99,12 +126,16 @@ export function recordTransaction(
     tx.market = market;
     tx.option = option;
   }
+
+  // update Transaction.orderType if priority of given orderType is higher
   if (
     ORDER_TYPE_PRIORITY.indexOf(orderType) >
     ORDER_TYPE_PRIORITY.indexOf(tx.orderType)
   ) {
     tx.orderType = orderType;
   }
+
+  // push given orderType to the internalOrders array
   let _internalOrders = tx.internalOrders;
   if (!_internalOrders.includes(orderType)) {
     _internalOrders.push(orderType);
@@ -113,6 +144,11 @@ export function recordTransaction(
   tx.save();
 }
 
+/**
+ * Creates a user if not exist and links their id to Transaction
+ * @param userAddr Address of an account
+ * @param txHash Transaction hash
+ */
 export function linkUserWithTransaction(
   userAddr: string,
   txHash: string
@@ -128,6 +164,11 @@ export function linkUserWithTransaction(
   }
 }
 
+/**
+ * Updates ERC20 token balance of a given wallet address on the TokenBalance entity
+ * @param tokenAddr ERC20 token contract address
+ * @param userAddr wallet address
+ */
 export function updateTokenBalance(
   tokenAddr: Address,
   userAddr: Address
@@ -161,6 +202,12 @@ export function updateTokenBalance(
   }
 }
 
+/**
+ * Pretty much same as updateTokenBalance
+ * This updates LP token balances
+ * @param pairAddr Uniswap Pair contract address
+ * @param userAddr wallet address
+ */
 export function updateLiquidityPosition(
   pairAddr: Address,
   userAddr: Address
@@ -169,6 +216,7 @@ export function updateLiquidityPosition(
     return; // no-op for zero address
   }
 
+  // creating user if not exists
   let user = User.load(userAddr.toHexString());
   if (user === null) {
     user = new User(userAddr.toHexString());
@@ -177,6 +225,7 @@ export function updateLiquidityPosition(
 
   let uniswapPair = UniswapPair.load(pairAddr.toHexString());
 
+  // making a balanceOf call to the uniswap pair address
   let erc20Contract = ERC20.bind(pairAddr);
   let result = erc20Contract.try_balanceOf(userAddr);
   if (!result.reverted) {
