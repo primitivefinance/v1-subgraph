@@ -1,10 +1,12 @@
 import { Address, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
 import {
   LiquidityPosition,
+  OptionPosition,
   Token,
   TokenBalance,
   Transaction,
   UniswapPair,
+  Option,
   User,
 } from '../../generated/schema';
 import { ERC20 } from '../../generated/OptionFactory/ERC20';
@@ -250,5 +252,62 @@ export function updateLiquidityPosition(
       BigInt.fromI32(18)
     );
     liquidityPosition.save();
+  }
+}
+
+/**
+ * Pretty much same as updateTokenBalance
+ * This updates Option and Redeem token balances
+ * @param optionAddr Option contract address
+ * @param userAddr wallet address
+ */
+export function updateOptionPosition(
+  optionAddr: Address,
+  userAddr: Address
+): void {
+  if (userAddr.equals(ADDRESS_ZERO)) {
+    return; // no-op for zero address
+  }
+
+  // creating user if not exists
+  let user = User.load(userAddr.toHexString());
+  if (user === null) {
+    user = new User(userAddr.toHexString());
+    user.save();
+  }
+
+  let option = Option.load(optionAddr.toHexString());
+
+  // making a balanceOf call to the option contract address
+  let optionErc20Contract = ERC20.bind(optionAddr);
+  let optionBalResResult = optionErc20Contract.try_balanceOf(userAddr);
+  if (!optionBalResResult.reverted) {
+    let optionPosition = OptionPosition.load(
+      optionAddr.toHexString() + '-' + userAddr.toHexString()
+    );
+    if (optionPosition === null) {
+      // user is creating option for first time to this pair
+      optionPosition = new OptionPosition(
+        optionAddr.toHexString() + '-' + userAddr.toHexString()
+      );
+      optionPosition.option = option.id;
+      optionPosition.uniswapPair = option.uniswapPair;
+      optionPosition.user = user.id;
+      optionPosition.positionType = 'NONE';
+    }
+    optionPosition.longBalance = convertBigIntToBigDecimal(
+      optionBalResResult.value,
+      BigInt.fromI32(18)
+    );
+    // making a balanceOf call to the redeem contract address
+    let redeemErc20Contract = ERC20.bind(Address.fromString(option.shortToken));
+    let redeemBalResResult = redeemErc20Contract.try_balanceOf(userAddr);
+    if (redeemBalResResult.reverted) {
+      optionPosition.shortBalance = convertBigIntToBigDecimal(
+        redeemBalResResult.value,
+        BigInt.fromI32(18)
+      );
+      optionPosition.save();
+    }
   }
 }

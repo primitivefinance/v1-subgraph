@@ -100,6 +100,8 @@ templates:
       abis:
         - name: Option
           file: ./abis/Option.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: Mint(indexed address,uint256,uint256)
           handler: handleEvent_Mint
@@ -113,6 +115,8 @@ templates:
           handler: handleEvent_UpdatedCacheBalances
         # - event: InitializedRedeem(indexed address,indexed address)
         #   handler: handleEvent_OptionInitializedRedeem
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleEvent_Transfer
   - name: UniswapPair
     kind: ethereum/contract
     network: mainnet
@@ -128,6 +132,8 @@ templates:
       abis:
         - name: UniswapPair
           file: ./abis/UniswapPair.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       # callHandlers:
       #   - function: mint(address)
       #     handler: handleCall_mint

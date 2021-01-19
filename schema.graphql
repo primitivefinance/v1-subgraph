@@ -58,6 +58,7 @@ type Option @entity {
   uniswapPair: UniswapPair
 
   # one-to-many relationships using reverse lookup
+  optionPositions: [OptionPosition!]! @derivedFrom(field: "option")
   transactions: [Transaction!]! @derivedFrom(field: "option")
 }
 
@@ -121,6 +122,10 @@ type UniswapPair @entity {
   # details
   createdAtTimestamp: Int!
   createdAtBlockNumber: BigInt!
+
+  # one-to-many relationships using reverse lookup
+  optionPositions: [OptionPosition!]! @derivedFrom(field: "uniswapPair")
+  liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "uniswapPair")
 }
 
 type Transaction @entity {
@@ -164,9 +169,8 @@ type User @entity {
   # user address
   id: ID!
 
-  # optionPositions: [OptionPosition]
-
   # one-to-many relationships using reverse lookup
+  optionPositions: [OptionPosition!]! @derivedFrom(field: "user")
   liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "user")
   transactions: [Transaction!]! @derivedFrom(field: "user")
   tokenBalances: [TokenBalance]! @derivedFrom(field: "user")
@@ -177,6 +181,20 @@ type LiquidityPosition @entity {
   id: ID!
 
   liquidityTokenBalance: BigDecimal!
+
+  # for reverse lookup
+  option: Option!
+  uniswapPair: UniswapPair!
+  user: User!
+}
+
+type OptionPosition @entity {
+  # pair address + '-' + user address
+  id: ID!
+
+  positionType: OrderType!
+  longBalance: BigDecimal!
+  shortBalance: BigDecimal!
 
   # for reverse lookup
   option: Option!

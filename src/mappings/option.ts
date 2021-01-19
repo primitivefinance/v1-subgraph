@@ -1,9 +1,24 @@
-import { Market, Option, Transaction } from '../../generated/schema';
+import { Market, Option } from '../../generated/schema';
 import {
   UpdatedCacheBalances,
   Mint,
+  Transfer,
 } from '../../generated/OptionFactory/Option';
-import { bigDecimalizeToken, recordTransaction } from './helpers';
+import {
+  bigDecimalizeToken,
+  recordTransaction,
+  updateOptionPosition,
+} from './helpers';
+
+/**
+ * This method is called by the indexer whenever it finds the event
+ * @dev Emitted whenever liquidity is added or removed or transferred to other wallets
+ * @param event contains event params and other info like tx, block
+ */
+export function handleEvent_Transfer(event: Transfer): void {
+  updateOptionPosition(event.address, event.params.from);
+  updateOptionPosition(event.address, event.params.to);
+}
 
 /**
  * This method is called by the indexer whenever it finds the event
