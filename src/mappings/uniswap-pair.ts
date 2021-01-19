@@ -27,7 +27,7 @@ export function handleEvent_Transfer(event: Transfer): void {
  * This method is called by the indexer whenever it finds the event
  * @param event contains event params and other info like tx, block
  */
-export function handleEvent_PairSwap(event: Swap): void {
+export function handleEvent_Swap(event: Swap): void {
   let uniswapPair = UniswapPair.load(event.address.toHexString());
 
   if (uniswapPair !== null) {
