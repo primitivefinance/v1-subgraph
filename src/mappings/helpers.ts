@@ -1,4 +1,10 @@
-import { Address, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
+import {
+  Address,
+  BigInt,
+  BigDecimal,
+  log,
+  ethereum,
+} from '@graphprotocol/graph-ts';
 import {
   LiquidityPosition,
   OptionPosition,
@@ -8,6 +14,8 @@ import {
   UniswapPair,
   Option,
   User,
+  LiquidityPositionSnapshot,
+  OptionPositionSnapshot,
 } from '../../generated/schema';
 import { ERC20 } from '../../generated/OptionFactory/ERC20';
 import {
@@ -16,6 +24,7 @@ import {
   BIGINT_ONE,
   ORDER_TYPE_PRIORITY,
   ADDRESS_ZERO,
+  BIGDECIMAL_ZERO,
 } from './constants';
 
 /**
@@ -212,7 +221,9 @@ export function updateTokenBalance(
  */
 export function updateLiquidityPosition(
   pairAddr: Address,
-  userAddr: Address
+  userAddr: Address,
+  blockNumber: BigInt,
+  timestamp: BigInt
 ): void {
   if (userAddr.equals(ADDRESS_ZERO)) {
     return; // no-op for zero address
@@ -246,12 +257,36 @@ export function updateLiquidityPosition(
       liquidityPosition.option = uniswapPair.option;
       liquidityPosition.uniswapPair = uniswapPair.id;
       liquidityPosition.user = user.id;
+      liquidityPosition.liquidityTokenBalance = BIGDECIMAL_ZERO;
     }
-    liquidityPosition.liquidityTokenBalance = convertBigIntToBigDecimal(
+    let newBalance = convertBigIntToBigDecimal(
       result.value,
       BigInt.fromI32(18)
     );
-    liquidityPosition.save();
+    // check if there is a change
+    if (!liquidityPosition.liquidityTokenBalance.equals(newBalance)) {
+      // first update entity and write to storage
+      liquidityPosition.liquidityTokenBalance = newBalance;
+      liquidityPosition.save();
+
+      // creating a snapshot
+      let snapshotId =
+        pairAddr.toHexString() +
+        '-' +
+        userAddr.toHexString() +
+        '-' +
+        blockNumber.toString();
+      let snapshot = LiquidityPositionSnapshot.load(snapshotId);
+      if (snapshot === null) {
+        snapshot = new LiquidityPositionSnapshot(snapshotId);
+        snapshot.blockNumber = blockNumber;
+        snapshot.timestamp = timestamp;
+        snapshot.liquidityPosition = liquidityPosition.id;
+        snapshot.liquidityTokenBalance =
+          liquidityPosition.liquidityTokenBalance;
+        snapshot.save();
+      }
+    }
   }
 }
 
@@ -263,7 +298,9 @@ export function updateLiquidityPosition(
  */
 export function updateOptionPosition(
   optionAddr: Address,
-  userAddr: Address
+  userAddr: Address,
+  blockNumber: BigInt,
+  timestamp: BigInt
 ): void {
   if (userAddr.equals(ADDRESS_ZERO)) {
     return; // no-op for zero address
@@ -293,21 +330,53 @@ export function updateOptionPosition(
       optionPosition.option = option.id;
       optionPosition.uniswapPair = option.uniswapPair;
       optionPosition.user = user.id;
-      optionPosition.positionType = 'NONE';
+      optionPosition.positionType = 'NONE'; // TODO: need to have some way to set the positionType
+      optionPosition.longBalance = BIGDECIMAL_ZERO;
+      optionPosition.shortBalance = BIGDECIMAL_ZERO;
     }
-    optionPosition.longBalance = convertBigIntToBigDecimal(
+    let newLongBalance = convertBigIntToBigDecimal(
       optionBalResResult.value,
       BigInt.fromI32(18)
     );
+
     // making a balanceOf call to the redeem contract address
     let redeemErc20Contract = ERC20.bind(Address.fromString(option.shortToken));
     let redeemBalResResult = redeemErc20Contract.try_balanceOf(userAddr);
     if (redeemBalResResult.reverted) {
-      optionPosition.shortBalance = convertBigIntToBigDecimal(
+      let newShortBalance = convertBigIntToBigDecimal(
         redeemBalResResult.value,
         BigInt.fromI32(18)
       );
-      optionPosition.save();
+
+      // check if there is a change
+      if (
+        !optionPosition.longBalance.equals(newLongBalance) ||
+        !optionPosition.shortBalance.equals(newShortBalance)
+      ) {
+        // first update entity and write to storage
+        optionPosition.longBalance = newLongBalance;
+        optionPosition.shortBalance = newShortBalance;
+        optionPosition.save();
+
+        // creating a snapshot
+        let snapshotId =
+          optionAddr.toHexString() +
+          '-' +
+          userAddr.toHexString() +
+          '-' +
+          blockNumber.toString();
+        let snapshot = OptionPositionSnapshot.load(snapshotId);
+        if (snapshot === null) {
+          snapshot = new OptionPositionSnapshot(snapshotId);
+          snapshot.blockNumber = blockNumber;
+          snapshot.timestamp = timestamp;
+          snapshot.optionPosition = optionPosition.id;
+          snapshot.positionType = optionPosition.positionType;
+          snapshot.longBalance = optionPosition.longBalance;
+          snapshot.shortBalance = optionPosition.shortBalance;
+          snapshot.save();
+        }
+      }
     }
   }
 }

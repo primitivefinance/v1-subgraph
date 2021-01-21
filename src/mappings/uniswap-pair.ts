@@ -19,8 +19,18 @@ import {
  * @param event contains event params and other info like tx, block
  */
 export function handleEvent_Transfer(event: Transfer): void {
-  updateLiquidityPosition(event.address, event.params.from);
-  updateLiquidityPosition(event.address, event.params.to);
+  updateLiquidityPosition(
+    event.address,
+    event.params.from,
+    event.block.number,
+    event.block.timestamp
+  );
+  updateLiquidityPosition(
+    event.address,
+    event.params.to,
+    event.block.number,
+    event.block.timestamp
+  );
 }
 
 /**

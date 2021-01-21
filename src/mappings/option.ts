@@ -16,8 +16,18 @@ import {
  * @param event contains event params and other info like tx, block
  */
 export function handleEvent_Transfer(event: Transfer): void {
-  updateOptionPosition(event.address, event.params.from);
-  updateOptionPosition(event.address, event.params.to);
+  updateOptionPosition(
+    event.address,
+    event.params.from,
+    event.block.number,
+    event.block.timestamp
+  );
+  updateOptionPosition(
+    event.address,
+    event.params.to,
+    event.block.number,
+    event.block.timestamp
+  );
 }
 
 /**

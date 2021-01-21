@@ -186,6 +186,25 @@ type LiquidityPosition @entity {
   option: Option!
   uniswapPair: UniswapPair!
   user: User!
+
+  # one-to-many relationships using reverse lookup
+  liquidityPositionSnapshots: [LiquidityPositionSnapshot]!
+    @derivedFrom(field: "liquidityPosition")
+}
+
+type LiquidityPositionSnapshot @entity {
+  # pair address + '-' + user address + '-' + block number
+  id: ID!
+
+  # snapshot info
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  # historic value
+  liquidityTokenBalance: BigDecimal!
+
+  # for reverse lookup
+  liquidityPosition: LiquidityPosition!
 }
 
 type OptionPosition @entity {
@@ -200,4 +219,24 @@ type OptionPosition @entity {
   option: Option!
   uniswapPair: UniswapPair!
   user: User!
+
+  # one-to-many relationships using reverse lookup
+  optionPositionSnapshots: [OptionPositionSnapshot]!
+    @derivedFrom(field: "optionPosition")
+}
+
+type OptionPositionSnapshot @entity {
+  # pair address + '-' + user address + '-' + block number
+  id: ID!
+
+  # snapshot info
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  positionType: OrderType!
+  longBalance: BigDecimal!
+  shortBalance: BigDecimal!
+
+  # for reverse lookup
+  optionPosition: OptionPosition!
 }
