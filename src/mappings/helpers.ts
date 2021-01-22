@@ -318,7 +318,12 @@ export function updateOptionPosition(
   // making a balanceOf call to the option contract address
   let optionErc20Contract = ERC20.bind(optionAddr);
   let optionBalResResult = optionErc20Contract.try_balanceOf(userAddr);
-  if (!optionBalResResult.reverted) {
+  if (optionBalResResult.reverted) {
+    log.debug('customlogs: Option({}).balanceOf({}) reverted', [
+      optionAddr.toHexString(),
+      userAddr.toHexString(),
+    ]);
+  } else {
     let optionPosition = OptionPosition.load(
       optionAddr.toHexString() + '-' + userAddr.toHexString()
     );
@@ -343,6 +348,11 @@ export function updateOptionPosition(
     let redeemErc20Contract = ERC20.bind(Address.fromString(option.shortToken));
     let redeemBalResResult = redeemErc20Contract.try_balanceOf(userAddr);
     if (redeemBalResResult.reverted) {
+      log.debug('customlogs: Redeem({}).balanceOf({}) reverted', [
+        option.shortToken,
+        userAddr.toHexString(),
+      ]);
+    } else {
       let newShortBalance = convertBigIntToBigDecimal(
         redeemBalResResult.value,
         BigInt.fromI32(18)
