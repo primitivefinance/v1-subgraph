@@ -1,5 +1,10 @@
 import { Address, log } from '@graphprotocol/graph-ts';
-import { Token, UniswapPair, Option } from '../../generated/schema';
+import {
+  Token,
+  UniswapPair,
+  Option,
+  UniswapFactory,
+} from '../../generated/schema';
 import {
   UniswapPair as UniswapPairTemplate,
   ERC20Token as ERC20Template,
@@ -15,6 +20,11 @@ import { BIGINT_ZERO, BIGDECIMAL_ZERO } from './constants';
  * @param event PairCreated event data
  */
 export function handleEvent_PairCreated(event: PairCreated): void {
+  let uniswapFactory = UniswapFactory.load(event.address.toString());
+  if (uniswapFactory === null) {
+    uniswapFactory = new UniswapFactory(event.address.toString());
+  }
+
   let token0 = Token.load(event.params.token0.toHexString());
   let token1 = Token.load(event.params.token1.toHexString());
 
@@ -68,6 +78,9 @@ export function handleEvent_PairCreated(event: PairCreated): void {
       // # details
       uniswapPair.createdAtTimestamp = event.block.timestamp.toI32();
       uniswapPair.createdAtBlockNumber = event.block.number;
+
+      // adding one-to-one relationship
+      uniswapPair.uniswapFactory = uniswapFactory.id;
 
       let redeemContract = Redeem.bind(Address.fromString(redeemToken.id));
       let callResult = redeemContract.try_optionToken();

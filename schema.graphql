@@ -95,12 +95,17 @@ type TokenBalance @entity {
   user: User!
 }
 
+type UniswapFactory @entity {
+  # contract address
+  id: ID!
+
+  # one-to-many relationships using reverse lookup
+  pairs: [UniswapPair!]! @derivedFrom(field: "uniswapFactory")
+}
+
 type UniswapPair @entity {
   # uniswap pair address
   id: ID!
-
-  # one-to-one
-  option: Option!
 
   # tokens
   shortToken: Token! # redeem token
@@ -122,6 +127,10 @@ type UniswapPair @entity {
   # details
   createdAtTimestamp: Int!
   createdAtBlockNumber: BigInt!
+
+  # one-to-one
+  option: Option!
+  uniswapFactory: UniswapFactory!
 
   # one-to-many relationships using reverse lookup
   optionPositions: [OptionPosition!]! @derivedFrom(field: "uniswapPair")
