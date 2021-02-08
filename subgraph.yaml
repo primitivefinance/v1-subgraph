@@ -58,14 +58,62 @@ dataSources:
           handler: handleCall_flashMintShortOptionsThenSwap
         - function: flashCloseLongOptionsThenSwap(address,address,uint256,uint256,address[],address)
           handler: handleCall_flashCloseLongOptionsThenSwap
-      # eventHandlers:
-      #   - event: FlashOpened(indexed address,uint256,uint256)
-      #     handler: handleEvent_ConnectorFlashOpened
+  - kind: ethereum/contract
+    name: SushiswapConnector03
+    network: mainnet
+    source:
+      address: '0x9Daec8D56CDCBDE72abe65F4a5daF8cc0A5bF2f9'
+      abi: UniswapConnector03
+      startBlock: 11142828 # first deployClone tx
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/connector-uniswap.ts
+      entities:
+        - OptionFactory
+      abis:
+        - name: UniswapConnector03
+          file: ./abis/UniswapConnector03.json
+        - name: Option
+          file: ./abis/Option.json
+      callHandlers:
+        - function: addShortLiquidityWithUnderlying(address,uint256,uint256,uint256,address,uint256)
+          handler: handleCall_addShortLiquidityWithUnderlying
+        - function: removeShortLiquidityThenCloseOptions(address,uint256,uint256,uint256,address,uint256)
+          handler: handleCall_removeShortLiquidityThenCloseOptionsCall
+        - function: flashMintShortOptionsThenSwap(address,address,uint256,uint256,address[],address)
+          handler: handleCall_flashMintShortOptionsThenSwap
+        - function: flashCloseLongOptionsThenSwap(address,address,uint256,uint256,address[],address)
+          handler: handleCall_flashCloseLongOptionsThenSwap
   - kind: ethereum/contract
     name: UniswapFactory
     network: mainnet
     source:
       address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+      abi: UniswapFactory
+      startBlock: 11142828 # not considering any uniswap pairs deployed before first deployClone tx
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/uniswap-pair-factory.ts
+      entities:
+        - UniswapPair
+        # - Token
+      abis:
+        - name: UniswapFactory
+          file: ./abis/UniswapFactory.json
+        - name: Redeem
+          file: ./abis/Redeem.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleEvent_PairCreated
+  - kind: ethereum/contract
+    name: SushiswapFactory
+    network: mainnet
+    source:
+      address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac'
       abi: UniswapFactory
       startBlock: 11142828 # not considering any uniswap pairs deployed before first deployClone tx
     mapping:
