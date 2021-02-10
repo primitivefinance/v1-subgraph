@@ -7,7 +7,11 @@ import {
 import { DeployCloneCall } from '../../generated/OptionFactory/OptionFactory';
 import { Option as OptionContract } from '../../generated/OptionFactory/Option';
 import { BIGDECIMAL_ONE, BIGINT_ZERO } from './constants';
-import { getToken, recordTransaction } from './helpers';
+import {
+  getToken,
+  recordTransaction,
+  convertBigIntToBigDecimal,
+} from './helpers';
 
 /**
  * This method is called by the indexer whenever it finds call
@@ -33,7 +37,6 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
   if (option === null) {
     option = new Option(optionAddr.toHexString());
 
-    option.expiry = 0;
     option.strikeLocked = BIGDECIMAL_ONE; // BigDecimal!;
     option.underlyingLocked = BIGDECIMAL_ONE; // BigDecimal!;
     option.strikeVolume = BIGDECIMAL_ONE; // BigDecimal!;
@@ -51,6 +54,30 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
     let strikeTokenAddrResult = optionContract.try_getStrikeTokenAddress();
     if (!strikeTokenAddrResult.reverted) {
       option.strikeToken = getToken(strikeTokenAddrResult.value).id;
+    }
+
+    // fetching base value in underlying token unit
+    let baseResult = optionContract.try_getBaseValue();
+    if (!baseResult.reverted) {
+      option.base = convertBigIntToBigDecimal(
+        baseResult.value,
+        getToken(underlyingTokenAddrResult.value).decimals
+      );
+    }
+
+    // fetching quote value in strike token unit
+    let quoteResult = optionContract.try_getQuoteValue();
+    if (!quoteResult.reverted) {
+      option.quote = convertBigIntToBigDecimal(
+        quoteResult.value,
+        getToken(strikeTokenAddrResult.value).decimals
+      );
+    }
+
+    // fetching expiry time
+    let expiryResult = optionContract.try_getExpiryTime();
+    if (!expiryResult.reverted) {
+      option.expiry = expiryResult.value;
     }
 
     // registering option token entity

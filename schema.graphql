@@ -39,7 +39,9 @@ type Option @entity {
   id: ID!
 
   # option info
-  expiry: Int!
+  base: BigDecimal!
+  quote: BigDecimal!
+  expiry: BigInt!
   underlyingToken: Token!
   strikeToken: Token!
   shortToken: Token! # redeem token
