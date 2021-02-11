@@ -23,6 +23,7 @@ export function handleEvent_PairCreated(event: PairCreated): void {
   let uniswapFactory = UniswapFactory.load(event.address.toString());
   if (uniswapFactory === null) {
     uniswapFactory = new UniswapFactory(event.address.toString());
+    uniswapFactory.save();
   }
 
   let token0 = Token.load(event.params.token0.toHexString());
