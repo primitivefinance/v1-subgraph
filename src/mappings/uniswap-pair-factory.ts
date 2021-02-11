@@ -20,9 +20,9 @@ import { BIGINT_ZERO, BIGDECIMAL_ZERO } from './constants';
  * @param event PairCreated event data
  */
 export function handleEvent_PairCreated(event: PairCreated): void {
-  let uniswapFactory = UniswapFactory.load(event.address.toString());
+  let uniswapFactory = UniswapFactory.load(event.address.toHexString());
   if (uniswapFactory === null) {
-    uniswapFactory = new UniswapFactory(event.address.toString());
+    uniswapFactory = new UniswapFactory(event.address.toHexString());
     uniswapFactory.save();
   }
 
