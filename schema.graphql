@@ -46,6 +46,13 @@ type Option @entity {
   strikeToken: Token!
   shortToken: Token! # redeem token
   #
+  # extended info
+  strikePrice: BigDecimal! # if(underlyingToken == DAI), baseValue, quoteValue
+  openInterest: BigDecimal! # total supply of option token (PRM)
+  strikeDate: BigInt! # getExpiryValue()
+  token: Token! # if(underlyingToken == DAI), quoteToken, underlyingToken
+  premium: BigDecimal # null if UniswapPair not exist || 1 - (short reserve * baseValue / quoteValue * 1/underlyingReserve)
+  #
   # stats
   strikeLocked: BigDecimal!
   underlyingLocked: BigDecimal!

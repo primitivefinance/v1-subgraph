@@ -6,7 +6,7 @@ import {
 } from '../../generated/templates';
 import { DeployCloneCall } from '../../generated/OptionFactory/OptionFactory';
 import { Option as OptionContract } from '../../generated/OptionFactory/Option';
-import { BIGDECIMAL_ONE, BIGINT_ZERO } from './constants';
+import { BIGDECIMAL_ONE, BIGINT_ZERO, ADDRESS_DAI } from './constants';
 import {
   getToken,
   recordTransaction,
@@ -95,6 +95,34 @@ export function handleCall_deployClone(call: DeployCloneCall): void {
       token.kind = 'REDEEM';
       token.save();
     }
+
+    // setting extended info
+    // strike price
+    option.strikePrice =
+      option.underlyingToken == ADDRESS_DAI.toString()
+        ? option.base
+        : option.quote;
+
+    // open interest, updated when Mint event handler
+    let optionTotalSupplyResult = optionContract.try_totalSupply();
+    if (!optionTotalSupplyResult.reverted) {
+      option.openInterest = convertBigIntToBigDecimal(
+        optionTotalSupplyResult.value,
+        getToken(optionAddr).decimals
+      );
+    }
+
+    // strike date
+    option.strikeDate = option.expiry;
+
+    // token
+    option.token =
+      option.underlyingToken == ADDRESS_DAI.toString()
+        ? option.strikeToken
+        : option.underlyingToken;
+
+    // premium, updated in uniswap pair Sync event handler
+    option.premium = null;
 
     // creating market entity
     // let market = getMarket(option.underlyingToken + '-' + option.strikeToken);

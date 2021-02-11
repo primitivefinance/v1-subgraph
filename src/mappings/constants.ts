@@ -7,6 +7,9 @@ export let BIGDECIMAL_ONE = BigDecimal.fromString('1');
 export let ADDRESS_ZERO = Address.fromString(
   '0x0000000000000000000000000000000000000000'
 );
+export let ADDRESS_DAI = Address.fromString(
+  '0x6b175474e89094c44da98b954eedeac495271d0f'
+);
 
 export let ORDER_TYPE_PRIORITY = new Array<string>(18);
 

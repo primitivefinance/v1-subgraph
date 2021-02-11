@@ -4,8 +4,11 @@ import {
   Mint,
   Transfer,
 } from '../../generated/OptionFactory/Option';
+import { Option as OptionContract } from '../../generated/OptionFactory/Option';
 import {
   bigDecimalizeToken,
+  convertBigIntToBigDecimal,
+  getToken,
   recordTransaction,
   updateOptionPosition,
 } from './helpers';
@@ -79,4 +82,15 @@ export function handleEvent_Mint(event: Mint): void {
     event.address.toHexString(),
     'MINT'
   );
+
+  // update total supply
+  let optionContract = OptionContract.bind(event.address);
+  let optionTotalSupplyResult = optionContract.try_totalSupply();
+  if (!optionTotalSupplyResult.reverted) {
+    option.openInterest = convertBigIntToBigDecimal(
+      optionTotalSupplyResult.value,
+      getToken(event.address).decimals
+    );
+    option.save();
+  }
 }

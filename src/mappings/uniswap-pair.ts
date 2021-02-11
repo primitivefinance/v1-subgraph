@@ -6,7 +6,7 @@ import {
   Sync,
   UniswapPair as UniswapPairContract,
 } from '../../generated/templates/UniswapPair/UniswapPair';
-import { BIGINT_ZERO } from './constants';
+import { BIGDECIMAL_ONE, BIGINT_ZERO } from './constants';
 import {
   bigDecimalizeToken,
   recordTransaction,
@@ -137,5 +137,17 @@ export function handleEvent_Sync(event: Sync): void {
       uniswapPair.underlyingToken
     );
     uniswapPair.save();
+
+    let option = Option.load(uniswapPair.option);
+    if (option !== null) {
+      // 1 - (short reserve * baseValue / quoteValue * 1/underlyingReserve)
+      option.premium = BIGDECIMAL_ONE.minus(
+        uniswapPair.shortReserve
+          .times(option.base)
+          .div(option.quote)
+          .div(uniswapPair.underlyingReserve)
+      );
+      option.save();
+    }
   }
 }
