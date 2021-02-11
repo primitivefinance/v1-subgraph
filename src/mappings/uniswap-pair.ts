@@ -142,10 +142,10 @@ export function handleEvent_Sync(event: Sync): void {
     if (option !== null) {
       // 1 - (short reserve * baseValue / quoteValue * 1/underlyingReserve)
       option.premium = BIGDECIMAL_ONE.minus(
-        uniswapPair.shortReserve
+        uniswapPair.underlyingReserve
           .times(option.base)
           .div(option.quote)
-          .div(uniswapPair.underlyingReserve)
+          .div(uniswapPair.shortReserve)
       );
       option.save();
     }
